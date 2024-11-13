@@ -8,10 +8,19 @@ import (
 type BoardType string
 
 var (
-	BoardTypeUnknown      BoardType = "Unknown"
-	BoardTypeRaspberryPi4 BoardType = "Raspberry Pi 4"
-	BoardTypeRaspberryPi5 BoardType = "Raspberry Pi 5"
+	BoardTypeUnknown        BoardType = "Unknown"
+	BoardTypeRaspberryPi4   BoardType = "Raspberry Pi 4"
+	BoardTypeRaspberryPi5   BoardType = "Raspberry Pi 5"
+	BoardTypeJetsonNano     BoardType = "NVIDIA Jetson Nano"
+	BoardTypeJetsonOrinNano BoardType = "NVIDIA Orin Nano"
+	BoardTypeJersonOrin     BoardType = "NVIDIA AGX Orin"
 )
+
+var boards = []BoardType{
+	BoardTypeRaspberryPi4,
+	BoardTypeRaspberryPi5,
+	BoardTypeJetsonOrinNano,
+}
 
 func GetBoardType() (BoardType, error) {
 	c, err := os.ReadFile("/sys/firmware/devicetree/base/model")
@@ -19,14 +28,11 @@ func GetBoardType() (BoardType, error) {
 		return BoardTypeUnknown, err
 	}
 	str := string(c)
-	if strings.HasPrefix(str, string(BoardTypeRaspberryPi4)) {
-		return BoardTypeRaspberryPi4, nil
+	for _, board := range boards {
+		if strings.HasPrefix(str, string(board)) {
+			return board, nil
+		}
 	}
-
-	if strings.HasPrefix(str, string(BoardTypeRaspberryPi5)) {
-		return BoardTypeRaspberryPi5, nil
-	}
-
 	return BoardTypeUnknown, nil
 }
 
