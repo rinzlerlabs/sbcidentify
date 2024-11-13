@@ -18,11 +18,13 @@ const (
 	BoardTypeJetsonXavierNXDeveloperKit    BoardType = "NVIDIA Jetson Xavier NX Developer kit"
 	BoardTypeJetsonXavierNX8GB             BoardType = "NVIDIA Jetson Xavier NX 8GB RAM"
 	BoardTypeJetsonXavierNX16GB            BoardType = "NVIDIA Jetson Xavier NX 16GB RAM"
+	BoardTypeJetsonAGXXavier               BoardType = "NVIDIA Jetson AGX Xavier"
 	BoardTypeJetsonAGXXavier8GB            BoardType = "NVIDIA Jetson AGX Xavier 8GB RAM"
 	BoardTypeJetsonAGXXavier16GB           BoardType = "NVIDIA Jetson AGX Xavier 16GB RAM"
 	BoardTypeJetsonAGXXavier32GB           BoardType = "NVIDIA Jetson AGX Xavier 32GB RAM"
 	BoardTypeJetsonAGXXavier64GB           BoardType = "NVIDIA Jetson AGX Xavier 64GB RAM"
 	BoardTypeJetsonAGXXavierIndustrial32GB BoardType = "NVIDIA Jetson AGX Xavier Industrial 32GB RAM"
+	BoardTypeJetsonNanoDeveloperKit        BoardType = "NVIDIA Jetson Nano Developer Kit"
 	BoardTypeJetsonNano2GB                 BoardType = "NVIDIA Jetson Nano 2GB RAM"
 	BoardTypeJetsonNano16GbEMMC            BoardType = "NVIDIA Jetson Nano module 16GB eMMC"
 	BoardTypeJetsonNano4GB                 BoardType = "NVIDIA Jetson Nano 4GB RAM"
@@ -33,14 +35,16 @@ const (
 	BoardTypeJetsonTX1                     BoardType = "NVIDIA Jetson TX1"
 	BoardTypeJetsonTK1                     BoardType = "NVIDIA Jetson TK1"
 	BoardTypeClaraAGX                      BoardType = "NVIDIA Clara AGX"
+	BoardTypeShieldTV                      BoardType = "NVIDIA Shield TV"
 )
 
+// NVIDIA Jetson AGX Orin Developer Kit
 type jetson struct {
 	Model string
 	Type  BoardType
 }
 
-var jetsonModules = []jetson{
+var jetsonModulesByModelNumber = []jetson{
 	{"p3767-0000", BoardTypeJetsonOrinNX16GB},
 	{"p3767-0001", BoardTypeJetsonOrinNX8GB},
 
@@ -62,10 +66,14 @@ var jetsonModules = []jetson{
 	{"p2888-0005", BoardTypeJetsonAGXXavier64GB},
 	{"p2888-0006", BoardTypeJetsonAGXXavier8GB},
 	{"p2888-0008", BoardTypeJetsonAGXXavierIndustrial32GB},
+	{"p2972-0000", BoardTypeJetsonAGXXavier},
+
+	{"p2771-0000", BoardTypeJetsonTX2},
 
 	{"p3448-0000", BoardTypeJetsonNano4GB},
 	{"p3448-0002", BoardTypeJetsonNano16GbEMMC},
 	{"p3448-0003", BoardTypeJetsonNano2GB},
+	{"p3450-0000", BoardTypeJetsonNanoDeveloperKit},
 
 	{"p3636-0001", BoardTypeJetsonTX2NX},
 	{"p3509-0000", BoardTypeJetsonTX2NX},
@@ -75,15 +83,49 @@ var jetsonModules = []jetson{
 	{"p3310-1000", BoardTypeJetsonTX2},
 
 	{"p2180-1000", BoardTypeJetsonTX1},
+	{"p2371-2180", BoardTypeJetsonTX1},
+
+	{"p2894-0050", BoardTypeShieldTV},
 
 	{"r375-0001", BoardTypeJetsonTK1},
 
 	{"p3904-0000", BoardTypeClaraAGX},
 }
 
+var jetsonModulesByDeviceTreeBaseModel = []jetson{
+	{"NVIDIA Jetson Orin NX Engineering Reference Developer Kit", BoardTypeJetsonOrinNX16GB},
+	{"NVIDIA Jetson Orin Nano Developer Kit", BoardTypeJetsonOrinNanoDeveloperKit},
+	{"NVIDIA Jetson TX2 Developer Kit", BoardTypeJetsonTX2},
+	{"NVIDIA Jetson TX2", BoardTypeJetsonTX2},
+	{"NVIDIA Jetson TX2 NX Developer Kit", BoardTypeJetsonTX2NX},
+	{"NVIDIA Jetson AGX Xavier", BoardTypeJetsonAGXXavier},
+	{"NVIDIA Jetson AGX Xavier Developer Kit", BoardTypeJetsonAGXXavier},
+	{"NVIDIA Jetson Xavier NX Developer Kit (SD-card)", BoardTypeJetsonXavierNXDeveloperKit},
+	{"NVIDIA Jetson Xavier NX Developer Kit (eMMC)", BoardTypeJetsonXavierNXDeveloperKit},
+	{"NVIDIA Jetson Xavier NX (SD-card)", BoardTypeJetsonXavierNXDeveloperKit},
+	{"NVIDIA Jetson Xavier NX (eMMC)", BoardTypeJetsonXavierNX8GB},
+	{"NVIDIA Jetson TX1", BoardTypeJetsonTX1},
+	{"NVIDIA Jetson TX1 Developer Kit", BoardTypeJetsonTX1},
+	{"NVIDIA Shield TV", BoardTypeShieldTV},
+	{"NVIDIA Jetson Nano Developer Kit", BoardTypeJetsonNanoDeveloperKit},
+	{"NVIDIA Jetson AGX Orin Developer Kit", BoardTypeJetsonAGXOrin},
+	{"NVIDIA Jetson AGX Orin", BoardTypeJetsonAGXOrin},
+}
+
 type jetsonIdentifier struct{}
 
 func (r jetsonIdentifier) GetBoardType() (BoardType, error) {
+	boardType, err := getBoardTypeFromModuleModel()
+	if err == ErrUnknownBoard {
+		return getBoardTypeByDeviceTreeBaseModel()
+	} else if err != nil {
+		return BoardTypeUnknown, err
+	} else {
+		return boardType, nil
+	}
+}
+
+func getBoardTypeFromModuleModel() (BoardType, error) {
 	dtsFilename, err := getDtsFilename()
 	if err != nil {
 		return BoardTypeUnknown, err
@@ -96,8 +138,21 @@ func (r jetsonIdentifier) GetBoardType() (BoardType, error) {
 	if err != nil {
 		return BoardTypeUnknown, err
 	}
-	for _, m := range jetsonModules {
+	for _, m := range jetsonModulesByModelNumber {
 		if m.Model == moduleModel {
+			return m.Type, nil
+		}
+	}
+	return BoardTypeUnknown, ErrUnknownBoard
+}
+
+func getBoardTypeByDeviceTreeBaseModel() (BoardType, error) {
+	dtbm, err := getDeviceTreeBaseModel()
+	if err != nil {
+		return BoardTypeUnknown, err
+	}
+	for _, m := range jetsonModulesByDeviceTreeBaseModel {
+		if strings.Contains(dtbm, m.Model) {
 			return m.Type, nil
 		}
 	}
