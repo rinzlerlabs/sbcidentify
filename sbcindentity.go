@@ -1,39 +1,35 @@
 package sbcidentify
 
 import (
-	"os"
-	"strings"
+	"errors"
 )
 
-type BoardType string
+const (
+	BoardTypeUnknown BoardType = "Unknown"
+)
 
 var (
-	BoardTypeUnknown        BoardType = "Unknown"
-	BoardTypeRaspberryPi4   BoardType = "Raspberry Pi 4"
-	BoardTypeRaspberryPi5   BoardType = "Raspberry Pi 5"
-	BoardTypeJetsonNano     BoardType = "NVIDIA Jetson Nano"
-	BoardTypeJetsonOrinNano BoardType = "NVIDIA Orin Nano"
-	BoardTypeJersonOrin     BoardType = "NVIDIA AGX Orin"
+	ErrUnknownBoard error = errors.New("unknown board")
 )
 
-var boards = []BoardType{
-	BoardTypeRaspberryPi4,
-	BoardTypeRaspberryPi5,
-	BoardTypeJetsonOrinNano,
+type boardIdentifier interface {
+	GetBoardType() (BoardType, error)
+}
+
+var boardIdentifiers = []boardIdentifier{
+	raspberryPiIdentifier{},
+	jetsonIdentifier{},
 }
 
 func GetBoardType() (BoardType, error) {
-	c, err := os.ReadFile("/sys/firmware/devicetree/base/model")
-	if err != nil {
-		return BoardTypeUnknown, err
-	}
-	str := string(c)
-	for _, board := range boards {
-		if strings.HasPrefix(str, string(board)) {
-			return board, nil
+	for _, identifier := range boardIdentifiers {
+		board, err := identifier.GetBoardType()
+		if err != nil {
+			continue
 		}
+		return board, nil
 	}
-	return BoardTypeUnknown, nil
+	return BoardTypeUnknown, ErrUnknownBoard
 }
 
 func IsBoardType(boardType BoardType) bool {
