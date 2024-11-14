@@ -1,6 +1,7 @@
 package sbcidentify
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
@@ -43,6 +44,10 @@ type jetson struct {
 	Model string
 	Type  BoardType
 }
+
+var (
+	ErrDtsFileDoesNotExist = errors.New("DTS file does not exist")
+)
 
 var jetsonModulesByModelNumber = []jetson{
 	{"p3767-0000", BoardTypeJetsonOrinNX16GB},
@@ -116,7 +121,7 @@ type jetsonIdentifier struct{}
 
 func (r jetsonIdentifier) GetBoardType() (BoardType, error) {
 	boardType, err := getBoardTypeFromModuleModel()
-	if err == ErrUnknownBoard {
+	if err == ErrUnknownBoard || err == ErrDtsFileDoesNotExist {
 		return getBoardTypeByDeviceTreeBaseModel()
 	} else if err != nil {
 		return BoardTypeUnknown, err
@@ -160,6 +165,9 @@ func getBoardTypeByDeviceTreeBaseModel() (BoardType, error) {
 }
 
 func getDtsFilename() (string, error) {
+	if _, err := os.Stat("/proc/device-tree/nvidia,dtsfilename"); os.IsNotExist(err) {
+		return "", ErrDtsFileDoesNotExist
+	}
 	s, e := os.ReadFile("/proc/device-tree/nvidia,dtsfilename")
 	if e != nil {
 		return "", e
