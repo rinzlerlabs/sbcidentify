@@ -23,7 +23,7 @@ var (
 	ErrVcgencmdNotFound    = errors.New("vcgencmd not found")
 )
 
-func getDeviceTreeBaseModel() (string, error) {
+func getDeviceTreeBaseModel(logger *slog.Logger) (string, error) {
 	if _, err := os.Stat(firmwareDeviceTreeModelFile); err != nil {
 		logger.Debug("cannot read firmware device tree model file", slog.Any("error", err))
 		return "", ErrCannotIdentifyBoard
@@ -38,7 +38,7 @@ func getDeviceTreeBaseModel() (string, error) {
 	return str, nil
 }
 
-func getDeviceTreeModel() (string, error) {
+func getDeviceTreeModel(logger *slog.Logger) (string, error) {
 	if _, err := os.Stat(procDeviceTreeModelFile); err != nil {
 		logger.Debug("cannot read proc device tree model file", slog.Any("error", err))
 		return "", ErrCannotIdentifyBoard
@@ -62,7 +62,7 @@ func getDeviceTreeModel() (string, error) {
 // 	return strconv.Atoi(str)
 // }
 
-func getInstalledRAM() (int, error) {
+func getInstalledRAM(logger *slog.Logger) (int, error) {
 	if _, err := exec.LookPath("vcgencmd"); err != nil {
 		logger.Debug("vcgencmd not found", slog.Any("error", err))
 		return 0, ErrVcgencmdNotFound
@@ -85,7 +85,7 @@ func getInstalledRAM() (int, error) {
 	return installedRam, nil
 }
 
-func getDtsFile() (string, error) {
+func getDtsFile(logger *slog.Logger) (string, error) {
 	if _, err := os.Stat(dtsFileName); os.IsNotExist(err) {
 		logger.Debug("DTS file does not exist", slog.Any("error", err))
 		return "", ErrDtsFileDoesNotExist
@@ -100,14 +100,14 @@ func getDtsFile() (string, error) {
 	return str, nil
 }
 
-func getModuleNameFromDtsFilename(dtsFilename string) (string, error) {
+func getModuleNameFromDtsFilename(logger *slog.Logger, dtsFilename string) (string, error) {
 	filename := filepath.Base(dtsFilename)
 	ret := strings.TrimSuffix(filename, filepath.Ext(filename))
 	logger.Debug("module name", slog.String("name", ret))
 	return ret, nil
 }
 
-func getModuleModelFromModuleName(moduleName string) (string, error) {
+func getModuleModelFromModuleName(logger *slog.Logger, moduleName string) (string, error) {
 	parts := strings.Split(moduleName, "-")
 	if len(parts) >= 4 {
 		ret := strings.Join(parts[1:3], "-")

@@ -43,26 +43,39 @@ var raspberryPiModels = []raspberryPi{
 	{"Raspberry Pi 5 Model B", 8192, BoardTypeRaspberryPi5B8GB, BoardTypeRaspberryPi5B},
 }
 
-type raspberryPiIdentifier struct{}
+func NewRaspberryPiIdentifier(logger *slog.Logger) boardIdentifier {
+	logger.Info("initializing Raspberry Pi identifier")
+	newLogger := logger.With(slog.String("source", "RaspberryPiIdentifier"))
+	return &raspberryPiIdentifier{logger: newLogger}
+}
+
+type raspberryPiIdentifier struct {
+	logger *slog.Logger
+}
+
+func (r raspberryPiIdentifier) Name() string {
+	return "Raspberry Pi"
+}
 
 func (r raspberryPiIdentifier) GetBoardType() (BoardType, error) {
-	dtbm, err := getDeviceTreeBaseModel()
+	r.logger.Debug("getting board type")
+	dtbm, err := getDeviceTreeBaseModel(r.logger)
 	if err == ErrCannotIdentifyBoard {
-		dtbm, err = getDeviceTreeModel()
+		dtbm, err = getDeviceTreeModel(r.logger)
 		if err != nil {
 			return BoardTypeUnknown, err
 		}
 	} else if err != nil {
 		return BoardTypeUnknown, err
 	}
-	logger.Debug("device tree model", slog.String("model", dtbm))
+	r.logger.Debug("device tree model", slog.String("model", dtbm))
 	subModels := make([]raspberryPi, 0)
 	for _, m := range raspberryPiModels {
 		if strings.Contains(dtbm, m.Model) {
 			subModels = append(subModels, m)
 		}
 	}
-	ramMb, err := getInstalledRAM()
+	ramMb, err := getInstalledRAM(r.logger)
 	if err != nil {
 		return BoardTypeUnknown, err
 	}
@@ -71,6 +84,6 @@ func (r raspberryPiIdentifier) GetBoardType() (BoardType, error) {
 			return m.Type, nil
 		}
 	}
-	logger.Debug("no matching model found, using fallback", slog.String("model", dtbm), slog.Int("ram", ramMb), slog.Int("subModels", len(subModels)), slog.Any("subModels", subModels), slog.Any("fallback", subModels[0].Fallback))
+	r.logger.Debug("no matching model found, using fallback", slog.String("model", dtbm), slog.Int("ram", ramMb), slog.Int("subModels", len(subModels)), slog.Any("subModels", subModels), slog.Any("fallback", subModels[0].Fallback))
 	return subModels[0].Fallback, nil
 }

@@ -116,35 +116,49 @@ var jetsonModulesByDeviceTreeBaseModel = []jetson{
 	{"NVIDIA Jetson AGX Orin", BoardTypeJetsonAGXOrin},
 }
 
-type jetsonIdentifier struct{}
+type jetsonIdentifier struct {
+	logger *slog.Logger
+}
+
+func NewJetsonIdentifier(logger *slog.Logger) boardIdentifier {
+	logger.Info("initializing Jetson identifier")
+	newLogger := logger.With(slog.String("source", "Jetson"))
+	return jetsonIdentifier{
+		logger: newLogger,
+	}
+}
+
+func (r jetsonIdentifier) Name() string {
+	return "Jetson"
+}
 
 func (r jetsonIdentifier) GetBoardType() (BoardType, error) {
-	boardType, err := getBoardTypeFromModuleModel()
+	boardType, err := getBoardTypeFromModuleModel(r.logger)
 	if err == ErrDtsFileDoesNotExist {
-		logger.Debug("DTS file does not exist, falling back to device tree base model")
-		return getBoardTypeByDeviceTreeBaseModel()
+		r.logger.Debug("DTS file does not exist, falling back to device tree base model")
+		return getBoardTypeByDeviceTreeBaseModel(r.logger)
 	} else if err == ErrUnknownBoard {
-		logger.Debug("unknown board, falling back to device tree base model")
-		return getBoardTypeByDeviceTreeBaseModel()
+		r.logger.Debug("unknown board, falling back to device tree base model")
+		return getBoardTypeByDeviceTreeBaseModel(r.logger)
 	} else if err != nil {
-		logger.Debug("error getting board type", slog.Any("error", err))
+		r.logger.Debug("error getting board type", slog.Any("error", err))
 		return BoardTypeUnknown, err
 	} else {
-		logger.Debug("board type", slog.String("type", string(boardType)))
+		r.logger.Debug("board type", slog.String("type", string(boardType)))
 		return boardType, nil
 	}
 }
 
-func getBoardTypeFromModuleModel() (BoardType, error) {
-	dtsFilename, err := getDtsFile()
+func getBoardTypeFromModuleModel(logger *slog.Logger) (BoardType, error) {
+	dtsFilename, err := getDtsFile(logger)
 	if err != nil {
 		return BoardTypeUnknown, err
 	}
-	moduleName, err := getModuleNameFromDtsFilename(dtsFilename)
+	moduleName, err := getModuleNameFromDtsFilename(logger, dtsFilename)
 	if err != nil {
 		return BoardTypeUnknown, err
 	}
-	moduleModel, err := getModuleModelFromModuleName(moduleName)
+	moduleModel, err := getModuleModelFromModuleName(logger, moduleName)
 	if err != nil {
 		return BoardTypeUnknown, err
 	}
@@ -156,8 +170,8 @@ func getBoardTypeFromModuleModel() (BoardType, error) {
 	return BoardTypeUnknown, ErrUnknownBoard
 }
 
-func getBoardTypeByDeviceTreeBaseModel() (BoardType, error) {
-	dtbm, err := getDeviceTreeBaseModel()
+func getBoardTypeByDeviceTreeBaseModel(logger *slog.Logger) (BoardType, error) {
+	dtbm, err := getDeviceTreeBaseModel(logger)
 	if err != nil {
 		return BoardTypeUnknown, err
 	}
@@ -166,5 +180,6 @@ func getBoardTypeByDeviceTreeBaseModel() (BoardType, error) {
 			return m.Type, nil
 		}
 	}
+	logger.Debug("device tree base model does not match any boards", slog.String("model", dtbm))
 	return BoardTypeUnknown, ErrUnknownBoard
 }

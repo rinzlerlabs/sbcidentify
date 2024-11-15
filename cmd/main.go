@@ -25,19 +25,22 @@ func main() {
 
 	handlerConfig := &sbcidentify.HandlerConfig{Level: logLevel}
 
+	var logger *slog.Logger
 	switch *output {
 	case "StdOut":
-		sbcidentify.SetLogger(slog.New(sbcidentify.NewLogHandler(os.Stdout, handlerConfig)))
+		logger = slog.New(sbcidentify.NewLogHandler(os.Stdout, handlerConfig))
 	case "StdErr":
-		sbcidentify.SetLogger(slog.New(sbcidentify.NewLogHandler(os.Stderr, handlerConfig)))
+		logger = slog.New(sbcidentify.NewLogHandler(os.Stderr, handlerConfig))
 	default:
 		file, err := os.OpenFile(*output, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
 			panic(err)
 		}
 		defer file.Close()
-		sbcidentify.SetLogger(slog.New(sbcidentify.NewLogHandler(file, handlerConfig)))
+		logger = slog.New(sbcidentify.NewLogHandler(file, handlerConfig))
 	}
+
+	sbcidentify.SetLogger(logger.With("source", "sbcidentify"))
 
 	if board != nil && *board != "" {
 		fmt.Println(sbcidentify.IsBoardType(sbcidentify.BoardType(*board)))
@@ -45,8 +48,9 @@ func main() {
 	} else {
 		board, err := sbcidentify.GetBoardType()
 		if err != nil {
-			panic(err)
+			fmt.Printf("Error: %v\n", err)
+		} else {
+			fmt.Println(board)
 		}
-		fmt.Println(board)
 	}
 }
