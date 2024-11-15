@@ -38,9 +38,10 @@ var (
 )
 
 var (
-	ErrVcgencmdNotFound = errors.New("vcgencmd not found")
-	ErrInvalidMeminfo   = errors.New("invalid meminfo")
-	execLookPath        = exec.LookPath
+	ErrVcgencmdNotFound    = errors.New("vcgencmd not found")
+	ErrInvalidMeminfo      = errors.New("invalid meminfo")
+	ErrCannotIdentifyBoard = errors.New("cannot identify Raspberry Pi board")
+	execLookPath           = exec.LookPath
 )
 
 type raspberryPi struct {
@@ -83,7 +84,9 @@ func (r raspberryPiIdentifier) GetBoardType() (boardtype.SBC, error) {
 	dtbm, err := identifier.GetDeviceTreeBaseModel(r.logger)
 	if err == identifier.ErrCannotIdentifyBoard {
 		dtbm, err = identifier.GetDeviceTreeModel(r.logger)
-		if err != nil {
+		if err == identifier.ErrCannotIdentifyBoard {
+			return boardtype.BoardTypeUnknown, ErrCannotIdentifyBoard
+		} else if err != nil {
 			return boardtype.BoardTypeUnknown, err
 		}
 	} else if err != nil {
@@ -97,7 +100,10 @@ func (r raspberryPiIdentifier) GetBoardType() (boardtype.SBC, error) {
 		}
 	}
 	ramMb, err := getInstalledRAM(r.logger)
-	if err != nil {
+	if err == ErrVcgencmdNotFound {
+		r.logger.Debug("vcgencmd not found, using fallback", slog.String("model", dtbm), slog.Int("ram", ramMb), slog.Any("fallback", subModels[0].Fallback))
+		return subModels[0].Fallback, nil
+	} else if err != nil {
 		return boardtype.BoardTypeUnknown, err
 	}
 	for _, m := range subModels {

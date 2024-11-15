@@ -72,6 +72,7 @@ type jetson struct {
 
 var (
 	ErrDtsFileDoesNotExist = errors.New("DTS file does not exist")
+	ErrCannotIdentifyBoard = errors.New("cannot identify NVIDIA board")
 )
 
 var jetsonModulesByModelNumber = []jetson{
@@ -205,7 +206,7 @@ func getBoardTypeByDeviceTreeBaseModel(logger *slog.Logger) (boardtype.SBC, erro
 		}
 	}
 	logger.Debug("device tree base model does not match any boards", slog.String("model", dtbm))
-	return boardtype.BoardTypeUnknown, identifier.ErrCannotIdentifyBoard
+	return boardtype.BoardTypeUnknown, ErrCannotIdentifyBoard
 }
 
 func getDtsFile(logger *slog.Logger) (string, error) {
