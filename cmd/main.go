@@ -12,7 +12,6 @@ import (
 
 func main() {
 	debug := flag.Bool("d", false, "Enable debug logging")
-	board := flag.String("b", "", "Specify the board type")
 	output := flag.String("o", "StdOut", "Specify the log output, accept StdOut, StdErr, or a file path")
 	flag.Parse()
 
@@ -42,15 +41,10 @@ func main() {
 
 	sbcidentify.SetLogger(logger.With("source", "sbcidentify"))
 
-	if board != nil && *board != "" {
-		fmt.Println(sbcidentify.IsBoardType(sbcidentify.BoardType(*board)))
-		return
+	board, err := sbcidentify.GetBoardType()
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
 	} else {
-		board, err := sbcidentify.GetBoardType()
-		if err != nil {
-			fmt.Printf("Error: %v\n", err)
-		} else {
-			fmt.Println(board)
-		}
+		fmt.Println(board.GetPrettyName())
 	}
 }

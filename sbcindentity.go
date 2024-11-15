@@ -4,10 +4,11 @@ import (
 	"errors"
 	"log/slog"
 	"os"
-)
 
-const (
-	BoardTypeUnknown BoardType = "Unknown"
+	"github.com/thegreatco/sbcidentify/boardtype"
+	"github.com/thegreatco/sbcidentify/identifier"
+	_ "github.com/thegreatco/sbcidentify/nvidia"
+	_ "github.com/thegreatco/sbcidentify/raspberrypi"
 )
 
 var (
@@ -24,16 +25,8 @@ func SetLogger(l *slog.Logger) {
 	logger = l
 }
 
-type boardIdentifier interface {
-	Name() string
-	GetBoardType() (BoardType, error)
-}
-
-func GetBoardType() (BoardType, error) {
-	boardIdentifiers := []boardIdentifier{
-		NewJetsonIdentifier(logger),
-		NewRaspberryPiIdentifier(logger),
-	}
+func GetBoardType() (boardtype.SBC, error) {
+	boardIdentifiers := identifier.BuildIdentifiers(logger)
 	var final error
 	for _, identifier := range boardIdentifiers {
 		board, err := identifier.GetBoardType()
@@ -43,10 +36,10 @@ func GetBoardType() (BoardType, error) {
 		}
 		return board, nil
 	}
-	return BoardTypeUnknown, final
+	return boardtype.BoardTypeUnknown, final
 }
 
-func IsBoardType(boardType BoardType) bool {
+func IsBoardType(boardType boardtype.SBC) bool {
 	board, err := GetBoardType()
 	if err != nil {
 		return false
