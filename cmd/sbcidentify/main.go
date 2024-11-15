@@ -39,7 +39,7 @@ func main() {
 		logger = slog.New(sbcidentify.NewLogHandler(file, handlerConfig))
 	}
 
-	sbcidentify.SetLogger(logger)
+	sbcidentify.SetLogger(logger.With("source", "sbcidentify"))
 
 	board, err := sbcidentify.GetBoardType()
 	if err != nil {
