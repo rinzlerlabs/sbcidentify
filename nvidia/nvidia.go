@@ -161,23 +161,33 @@ func (r jetsonIdentifier) GetBoardType() (boardtype.SBC, error) {
 	boardType, err := getBoardTypeFromModuleModel(r.logger)
 	if err == ErrDtsFileDoesNotExist {
 		r.logger.Debug("DTS file does not exist, falling back to device tree base model")
-		return getBoardTypeByDeviceTreeBaseModel(r.logger)
+		boardType, err = getBoardTypeByDeviceTreeBaseModel(r.logger)
+		if err == identifier.ErrCannotIdentifyBoard {
+			r.logger.Debug("unknown board")
+			return nil, ErrCannotIdentifyBoard
+		} else if err != nil {
+			r.logger.Debug("error getting board type", slog.Any("error", err))
+			return nil, err
+		} else {
+			r.logger.Debug("board type", slog.String("type", string(boardType.GetPrettyName())))
+			return boardType, nil
+		}
 	} else if err == identifier.ErrCannotIdentifyBoard {
 		r.logger.Debug("unknown board, falling back to device tree base model")
 		boardType, err = getBoardTypeByDeviceTreeBaseModel(r.logger)
 		if err == identifier.ErrCannotIdentifyBoard {
 			r.logger.Debug("unknown board")
-			return boardtype.BoardTypeUnknown, ErrCannotIdentifyBoard
+			return nil, ErrCannotIdentifyBoard
 		} else if err != nil {
 			r.logger.Debug("error getting board type", slog.Any("error", err))
-			return boardtype.BoardTypeUnknown, err
+			return nil, err
 		} else {
 			r.logger.Debug("board type", slog.String("type", string(boardType.GetPrettyName())))
 			return boardType, nil
 		}
 	} else if err != nil {
 		r.logger.Debug("error getting board type", slog.Any("error", err))
-		return boardtype.BoardTypeUnknown, err
+		return nil, err
 	} else {
 		r.logger.Debug("board type", slog.String("type", string(boardType.GetPrettyName())))
 		return boardType, nil
@@ -187,28 +197,28 @@ func (r jetsonIdentifier) GetBoardType() (boardtype.SBC, error) {
 func getBoardTypeFromModuleModel(logger *slog.Logger) (boardtype.SBC, error) {
 	dtsFilename, err := getDtsFile(logger)
 	if err != nil {
-		return boardtype.BoardTypeUnknown, err
+		return nil, err
 	}
 	moduleName, err := getModuleNameFromDtsFilename(logger, dtsFilename)
 	if err != nil {
-		return boardtype.BoardTypeUnknown, err
+		return nil, err
 	}
 	moduleModel, err := getModuleModelFromModuleName(logger, moduleName)
 	if err != nil {
-		return boardtype.BoardTypeUnknown, err
+		return nil, err
 	}
 	for _, m := range jetsonModulesByModelNumber {
 		if m.Model == moduleModel {
 			return m.Type, nil
 		}
 	}
-	return boardtype.BoardTypeUnknown, identifier.ErrCannotIdentifyBoard
+	return nil, identifier.ErrCannotIdentifyBoard
 }
 
 func getBoardTypeByDeviceTreeBaseModel(logger *slog.Logger) (boardtype.SBC, error) {
 	dtbm, err := identifier.GetDeviceTreeBaseModel(logger)
 	if err != nil {
-		return boardtype.BoardTypeUnknown, err
+		return nil, err
 	}
 	for _, m := range jetsonModulesByDeviceTreeBaseModel {
 		if strings.Contains(dtbm, m.Model) {
@@ -216,7 +226,7 @@ func getBoardTypeByDeviceTreeBaseModel(logger *slog.Logger) (boardtype.SBC, erro
 		}
 	}
 	logger.Debug("device tree base model does not match any boards", slog.String("model", dtbm))
-	return boardtype.BoardTypeUnknown, ErrCannotIdentifyBoard
+	return nil, ErrCannotIdentifyBoard
 }
 
 func getDtsFile(logger *slog.Logger) (string, error) {

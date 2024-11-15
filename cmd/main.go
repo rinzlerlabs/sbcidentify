@@ -43,7 +43,15 @@ func main() {
 
 	board, err := sbcidentify.GetBoardType()
 	if err != nil {
-		fmt.Printf("Error: %v\n", err)
+		if errList, ok := err.(interface{ Unwrap() []error }); ok {
+			// Access the slice of errors
+			errs := errList.Unwrap()
+			for _, e := range errs {
+				fmt.Printf("Error: %v\n", e)
+			}
+		} else {
+			fmt.Printf("Error: %v\n", err)
+		}
 	} else {
 		fmt.Println(board.GetPrettyName())
 	}

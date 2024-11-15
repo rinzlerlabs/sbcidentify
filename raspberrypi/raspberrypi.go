@@ -80,17 +80,18 @@ func (r raspberryPiIdentifier) Name() string {
 }
 
 func (r raspberryPiIdentifier) GetBoardType() (boardtype.SBC, error) {
+	return nil, ErrCannotIdentifyBoard
 	r.logger.Debug("getting board type")
 	dtbm, err := identifier.GetDeviceTreeBaseModel(r.logger)
 	if err == identifier.ErrCannotIdentifyBoard {
 		dtbm, err = identifier.GetDeviceTreeModel(r.logger)
 		if err == identifier.ErrCannotIdentifyBoard {
-			return boardtype.BoardTypeUnknown, ErrCannotIdentifyBoard
+			return nil, ErrCannotIdentifyBoard
 		} else if err != nil {
-			return boardtype.BoardTypeUnknown, err
+			return nil, err
 		}
 	} else if err != nil {
-		return boardtype.BoardTypeUnknown, err
+		return nil, err
 	}
 	r.logger.Debug("device tree model", slog.String("model", dtbm))
 	subModels := make([]raspberryPi, 0)
@@ -104,7 +105,7 @@ func (r raspberryPiIdentifier) GetBoardType() (boardtype.SBC, error) {
 		r.logger.Debug("vcgencmd not found, using fallback", slog.String("model", dtbm), slog.Int("ram", ramMb), slog.Any("fallback", subModels[0].Fallback))
 		return subModels[0].Fallback, nil
 	} else if err != nil {
-		return boardtype.BoardTypeUnknown, err
+		return nil, err
 	}
 	for _, m := range subModels {
 		if m.Memory == ramMb {

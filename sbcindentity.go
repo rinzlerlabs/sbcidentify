@@ -34,9 +34,9 @@ func GetBoardType() (boardtype.SBC, error) {
 			final = errors.Join(final, err)
 			continue
 		}
-		return board, nil
+		return board, final
 	}
-	return boardtype.BoardTypeUnknown, final
+	return nil, final
 }
 
 func IsBoardType(boardType boardtype.SBC) bool {

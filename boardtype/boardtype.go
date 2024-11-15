@@ -38,10 +38,6 @@ func (b BoardType) GetPrettyName() string {
 	return b.Manufacturer + " " + b.Model + " " + b.SubModel
 }
 
-var (
-	BoardTypeUnknown BoardType = BoardType{"Unknown", "Unknown", "Unknown", 0}
-)
-
 type SBC interface {
 	GetManufacturer() string
 	GetModel() string
