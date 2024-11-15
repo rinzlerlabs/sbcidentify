@@ -80,7 +80,6 @@ func (r raspberryPiIdentifier) Name() string {
 }
 
 func (r raspberryPiIdentifier) GetBoardType() (boardtype.SBC, error) {
-	return nil, ErrCannotIdentifyBoard
 	r.logger.Debug("getting board type")
 	dtbm, err := identifier.GetDeviceTreeBaseModel(r.logger)
 	if err == identifier.ErrCannotIdentifyBoard {
