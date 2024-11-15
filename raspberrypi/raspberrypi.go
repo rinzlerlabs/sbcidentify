@@ -65,7 +65,7 @@ var raspberryPiModels = []raspberryPi{
 }
 
 func NewRaspberryPiIdentifier(logger *slog.Logger) identifier.BoardIdentifier {
-	logger.Info("initializing Raspberry Pi identifier")
+	logger.Debug("initializing Raspberry Pi identifier")
 	newLogger := logger.With(slog.String("source", "RaspberryPiIdentifier"))
 	return &raspberryPiIdentifier{logger: newLogger}
 }

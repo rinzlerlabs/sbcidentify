@@ -145,7 +145,7 @@ type jetsonIdentifier struct {
 }
 
 func NewNvidiaIdentifier(logger *slog.Logger) identifier.BoardIdentifier {
-	logger.Info("initializing Jetson identifier")
+	logger.Debug("initializing Jetson identifier")
 	newLogger := logger.With(slog.String("source", "NVIDIA"))
 	return jetsonIdentifier{
 		logger: newLogger,
