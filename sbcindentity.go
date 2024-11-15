@@ -2,6 +2,8 @@ package sbcidentify
 
 import (
 	"errors"
+	"log/slog"
+	"os"
 )
 
 const (
@@ -9,16 +11,26 @@ const (
 )
 
 var (
-	ErrUnknownBoard error = errors.New("unknown board")
+	ErrUnknownBoard error          = errors.New("unknown board")
+	logLevel        *slog.LevelVar = new(slog.LevelVar)
+	logger          *slog.Logger   = slog.New(NewLogHandler(os.Stderr, &HandlerConfig{Level: logLevel}))
 )
+
+func SetLogLevel(level slog.Level) {
+	logLevel.Set(level)
+}
+
+func SetLogger(l *slog.Logger) {
+	logger = l
+}
 
 type boardIdentifier interface {
 	GetBoardType() (BoardType, error)
 }
 
 var boardIdentifiers = []boardIdentifier{
-	raspberryPiIdentifier{},
 	jetsonIdentifier{},
+	raspberryPiIdentifier{},
 }
 
 func GetBoardType() (BoardType, error) {

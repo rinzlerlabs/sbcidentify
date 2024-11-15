@@ -2,8 +2,7 @@ package sbcidentify
 
 import (
 	"errors"
-	"os"
-	"path/filepath"
+	"log/slog"
 	"strings"
 )
 
@@ -121,17 +120,23 @@ type jetsonIdentifier struct{}
 
 func (r jetsonIdentifier) GetBoardType() (BoardType, error) {
 	boardType, err := getBoardTypeFromModuleModel()
-	if err == ErrUnknownBoard || err == ErrDtsFileDoesNotExist {
+	if err == ErrDtsFileDoesNotExist {
+		logger.Debug("DTS file does not exist, falling back to device tree base model")
+		return getBoardTypeByDeviceTreeBaseModel()
+	} else if err == ErrUnknownBoard {
+		logger.Debug("unknown board, falling back to device tree base model")
 		return getBoardTypeByDeviceTreeBaseModel()
 	} else if err != nil {
+		logger.Debug("error getting board type", slog.Any("error", err))
 		return BoardTypeUnknown, err
 	} else {
+		logger.Debug("board type", slog.String("type", string(boardType)))
 		return boardType, nil
 	}
 }
 
 func getBoardTypeFromModuleModel() (BoardType, error) {
-	dtsFilename, err := getDtsFilename()
+	dtsFilename, err := getDtsFile()
 	if err != nil {
 		return BoardTypeUnknown, err
 	}
@@ -162,28 +167,4 @@ func getBoardTypeByDeviceTreeBaseModel() (BoardType, error) {
 		}
 	}
 	return BoardTypeUnknown, ErrUnknownBoard
-}
-
-func getDtsFilename() (string, error) {
-	if _, err := os.Stat("/proc/device-tree/nvidia,dtsfilename"); os.IsNotExist(err) {
-		return "", ErrDtsFileDoesNotExist
-	}
-	s, e := os.ReadFile("/proc/device-tree/nvidia,dtsfilename")
-	if e != nil {
-		return "", e
-	}
-	return string(s), nil
-}
-
-func getModuleNameFromDtsFilename(dtsFilename string) (string, error) {
-	filename := filepath.Base(dtsFilename)
-	return strings.TrimSuffix(filename, filepath.Ext(filename)), nil
-}
-
-func getModuleModelFromModuleName(moduleName string) (string, error) {
-	parts := strings.Split(moduleName, "-")
-	if len(parts) >= 4 {
-		return strings.Join(parts[1:3], "-"), nil
-	}
-	return "", ErrUnknownBoard
 }

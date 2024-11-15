@@ -2,6 +2,8 @@ package sbcidentify
 
 import (
 	"strings"
+
+	"log/slog"
 )
 
 const (
@@ -45,9 +47,15 @@ type raspberryPiIdentifier struct{}
 
 func (r raspberryPiIdentifier) GetBoardType() (BoardType, error) {
 	dtbm, err := getDeviceTreeBaseModel()
-	if err != nil {
+	if err == ErrCannotIdentifyBoard {
+		dtbm, err = getDeviceTreeModel()
+		if err != nil {
+			return BoardTypeUnknown, err
+		}
+	} else if err != nil {
 		return BoardTypeUnknown, err
 	}
+	logger.Debug("device tree model", slog.String("model", dtbm))
 	subModels := make([]raspberryPi, 0)
 	for _, m := range raspberryPiModels {
 		if strings.Contains(dtbm, m.Model) {
@@ -63,5 +71,6 @@ func (r raspberryPiIdentifier) GetBoardType() (BoardType, error) {
 			return m.Type, nil
 		}
 	}
+	logger.Debug("no matching model found, using fallback", slog.String("model", dtbm), slog.Int("ram", ramMb), slog.Int("subModels", len(subModels)), slog.Any("subModels", subModels), slog.Any("fallback", subModels[0].Fallback))
 	return subModels[0].Fallback, nil
 }
