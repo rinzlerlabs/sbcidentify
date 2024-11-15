@@ -164,7 +164,17 @@ func (r jetsonIdentifier) GetBoardType() (boardtype.SBC, error) {
 		return getBoardTypeByDeviceTreeBaseModel(r.logger)
 	} else if err == identifier.ErrCannotIdentifyBoard {
 		r.logger.Debug("unknown board, falling back to device tree base model")
-		return getBoardTypeByDeviceTreeBaseModel(r.logger)
+		boardType, err = getBoardTypeByDeviceTreeBaseModel(r.logger)
+		if err == identifier.ErrCannotIdentifyBoard {
+			r.logger.Debug("unknown board")
+			return boardtype.BoardTypeUnknown, ErrCannotIdentifyBoard
+		} else if err != nil {
+			r.logger.Debug("error getting board type", slog.Any("error", err))
+			return boardtype.BoardTypeUnknown, err
+		} else {
+			r.logger.Debug("board type", slog.String("type", string(boardType.GetPrettyName())))
+			return boardType, nil
+		}
 	} else if err != nil {
 		r.logger.Debug("error getting board type", slog.Any("error", err))
 		return boardtype.BoardTypeUnknown, err
