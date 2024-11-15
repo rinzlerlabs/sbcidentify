@@ -34,7 +34,7 @@ func GetBoardType() (boardtype.SBC, error) {
 			final = errors.Join(final, err)
 			continue
 		}
-		return board, final
+		return board, nil
 	}
 	return nil, final
 }
