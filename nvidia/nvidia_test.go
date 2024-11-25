@@ -51,6 +51,8 @@ func TestIsBoardType(t *testing.T) {
 		Have     boardtype.SBC
 		expected bool
 	}{
+		{NVIDIA, JetsonAGXOrin64GB, true},
+		{Jetson, JetsonAGXOrin64GB, true},
 		{JetsonAGXOrin, JetsonAGXOrin64GB, true},
 		{JetsonAGXOrin64GB, JetsonAGXOrin, false},
 		{JetsonOrinNano, JetsonOrinNano8GB, true},

@@ -16,25 +16,24 @@ func init() {
 	identifier.RegisterBoardIdentifier(NewRaspberryPiIdentifier)
 }
 
-type RaspberryPi struct{ boardtype.BoardType }
-type RaspberryPi3 struct{ RaspberryPi }
-type RaspberryPi4 struct{ RaspberryPi }
-type RaspberryPi5 struct{ RaspberryPi }
-
 var (
-	RaspberryPi3B     = RaspberryPi3{RaspberryPi{boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "3B", RAM: 1024}}}
-	RaspberryPi3APlus = RaspberryPi3{RaspberryPi{boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "3A+", RAM: 512, BaseModel: &RaspberryPi3B.BoardType}}}
-	RaspberryPi3BPlus = RaspberryPi3{RaspberryPi{boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "3B+", RAM: 1024, BaseModel: &RaspberryPi3B.BoardType}}}
-	RaspberryPi4B     = RaspberryPi4{RaspberryPi{boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "4B", RAM: 0}}}
-	RaspberryPi4B1GB  = RaspberryPi4{RaspberryPi{boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "4B", RAM: 1024, BaseModel: &RaspberryPi4B.BoardType}}}
-	RaspberryPi4B2GB  = RaspberryPi4{RaspberryPi{boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "4B", RAM: 2048, BaseModel: &RaspberryPi4B.BoardType}}}
-	RaspberryPi4B4GB  = RaspberryPi4{RaspberryPi{boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "4B", RAM: 4096, BaseModel: &RaspberryPi4B.BoardType}}}
-	RaspberryPi4B8GB  = RaspberryPi4{RaspberryPi{boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "4B", RAM: 8192, BaseModel: &RaspberryPi4B.BoardType}}}
-	RaspberryPi4400   = RaspberryPi4{RaspberryPi{boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "4 400", RAM: 4096, BaseModel: &RaspberryPi4B.BoardType}}}
-	RaspberryPi5B     = RaspberryPi5{RaspberryPi{boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "5B", RAM: 0}}}
-	RaspberryPi5B2GB  = RaspberryPi5{RaspberryPi{boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "5B", RAM: 2048, BaseModel: &RaspberryPi5B.BoardType}}}
-	RaspberryPi5B4GB  = RaspberryPi5{RaspberryPi{boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "5B", RAM: 4096, BaseModel: &RaspberryPi5B.BoardType}}}
-	RaspberryPi5B8GB  = RaspberryPi5{RaspberryPi{boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "5B", RAM: 8192, BaseModel: &RaspberryPi5B.BoardType}}}
+	RaspberryPi       = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "", RAM: 0}
+	RaspberryPi3      = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "", RAM: 0, BaseModel: &RaspberryPi}
+	RaspberryPi3B     = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "3B", RAM: 1024, BaseModel: &RaspberryPi3}
+	RaspberryPi3APlus = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "3A+", RAM: 512, BaseModel: &RaspberryPi3B}
+	RaspberryPi3BPlus = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "3B+", RAM: 1024, BaseModel: &RaspberryPi3B}
+	RaspberryPi4      = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "", RAM: 0, BaseModel: &RaspberryPi}
+	RaspberryPi4B     = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "4B", RAM: 0, BaseModel: &RaspberryPi4}
+	RaspberryPi4B1GB  = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "4B", RAM: 1024, BaseModel: &RaspberryPi4B}
+	RaspberryPi4B2GB  = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "4B", RAM: 2048, BaseModel: &RaspberryPi4B}
+	RaspberryPi4B4GB  = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "4B", RAM: 4096, BaseModel: &RaspberryPi4B}
+	RaspberryPi4B8GB  = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "4B", RAM: 8192, BaseModel: &RaspberryPi4B}
+	RaspberryPi4400   = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "4 400", RAM: 4096, BaseModel: &RaspberryPi4B}
+	RaspberryPi5      = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "", RAM: 0, BaseModel: &RaspberryPi}
+	RaspberryPi5B     = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "5B", RAM: 0}
+	RaspberryPi5B2GB  = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "5B", RAM: 2048, BaseModel: &RaspberryPi5B}
+	RaspberryPi5B4GB  = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "5B", RAM: 4096, BaseModel: &RaspberryPi5B}
+	RaspberryPi5B8GB  = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "5B", RAM: 8192, BaseModel: &RaspberryPi5B}
 )
 
 var (

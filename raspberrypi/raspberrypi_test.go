@@ -78,6 +78,8 @@ func TestIsBoardType(t *testing.T) {
 		Have     boardtype.SBC
 		expected bool
 	}{
+		{RaspberryPi, RaspberryPi4B8GB, true},
+		{RaspberryPi4, RaspberryPi4B8GB, true},
 		{RaspberryPi4B, RaspberryPi4B8GB, true},
 		{RaspberryPi4B8GB, RaspberryPi4B, false},
 		{RaspberryPi4B4GB, RaspberryPi4B8GB, false},

@@ -31,12 +31,16 @@ func (b BoardType) GetBaseModel() *BoardType {
 }
 
 func (b BoardType) IsBoardType(boardType SBC) bool {
-	if b.GetManufacturer() == boardType.GetManufacturer() && b.GetModel() == boardType.GetModel() && b.GetSubModel() == boardType.GetSubModel() && b.GetRAM() == boardType.GetRAM() {
+	return isBoardType(b, boardType)
+}
+
+func isBoardType(have SBC, want SBC) bool {
+	if have.GetManufacturer() == want.GetManufacturer() && have.GetModel() == want.GetModel() && have.GetSubModel() == want.GetSubModel() && have.GetRAM() == want.GetRAM() {
 		return true
 	}
 
-	if b.GetBaseModel() != nil && b.GetBaseModel().IsBoardType(boardType) {
-		return true
+	if have.GetBaseModel() != nil {
+		return isBoardType(have.GetBaseModel(), want)
 	}
 
 	return false
