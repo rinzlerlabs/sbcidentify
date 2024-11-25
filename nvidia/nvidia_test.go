@@ -47,8 +47,8 @@ func TestParseModelNameFromModuleName(t *testing.T) {
 
 func TestIsBoardType(t *testing.T) {
 	tests := []struct {
-		left     boardtype.SBC
-		right    boardtype.SBC
+		Want     boardtype.SBC
+		Have     boardtype.SBC
 		expected bool
 	}{
 		{JetsonAGXOrin, JetsonAGXOrin64GB, true},
@@ -58,8 +58,8 @@ func TestIsBoardType(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		t.Run(fmt.Sprintf("%v is %v", test.left.GetPrettyName(), test.right.GetPrettyName()), func(t *testing.T) {
-			if test.left.IsBoardType(test.right) != test.expected {
+		t.Run(fmt.Sprintf("Want_%v_Have_%v", test.Want.GetPrettyName(), test.Have.GetPrettyName()), func(t *testing.T) {
+			if test.Have.IsBoardType(test.Want) != test.expected {
 				t.Fatalf("IsBoardType() returned %v, expected %v", !test.expected, test.expected)
 			}
 		})

@@ -35,7 +35,7 @@ func (b BoardType) IsBoardType(boardType SBC) bool {
 		return true
 	}
 
-	if boardType.GetBaseModel() != nil && b.IsBoardType(boardType.GetBaseModel()) {
+	if b.GetBaseModel() != nil && b.GetBaseModel().IsBoardType(boardType) {
 		return true
 	}
 
