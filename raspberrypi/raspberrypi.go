@@ -30,7 +30,7 @@ var (
 	RaspberryPi4B8GB  = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "4B", RAM: 8192, BaseModel: &RaspberryPi4B}
 	RaspberryPi4400   = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "4 400", RAM: 4096, BaseModel: &RaspberryPi4B}
 	RaspberryPi5      = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "", RAM: 0, BaseModel: &RaspberryPi}
-	RaspberryPi5B     = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "5B", RAM: 0}
+	RaspberryPi5B     = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "5B", RAM: 0, BaseModel: &RaspberryPi5}
 	RaspberryPi5B2GB  = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "5B", RAM: 2048, BaseModel: &RaspberryPi5B}
 	RaspberryPi5B4GB  = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "5B", RAM: 4096, BaseModel: &RaspberryPi5B}
 	RaspberryPi5B8GB  = boardtype.BoardType{Manufacturer: "Raspberry Pi", Model: "Raspberry Pi", SubModel: "5B", RAM: 8192, BaseModel: &RaspberryPi5B}
