@@ -7,7 +7,7 @@ import (
 
 	"fmt"
 
-	"github.com/thegreatco/sbcidentify"
+	"github.com/rinzlerlabs/sbcidentify"
 )
 
 func main() {
