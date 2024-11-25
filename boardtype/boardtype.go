@@ -7,6 +7,7 @@ type BoardType struct {
 	Model        string
 	SubModel     string
 	RAM          int
+	BaseModel    *BoardType
 }
 
 func (b BoardType) GetManufacturer() string {
@@ -23,6 +24,22 @@ func (b BoardType) GetSubModel() string {
 
 func (b BoardType) GetRAM() int {
 	return b.RAM
+}
+
+func (b BoardType) GetBaseModel() *BoardType {
+	return b.BaseModel
+}
+
+func (b BoardType) IsBoardType(boardType SBC) bool {
+	if b.GetManufacturer() == boardType.GetManufacturer() && b.GetModel() == boardType.GetModel() && b.GetSubModel() == boardType.GetSubModel() && b.GetRAM() == boardType.GetRAM() {
+		return true
+	}
+
+	if boardType.GetBaseModel() != nil && b.IsBoardType(boardType.GetBaseModel()) {
+		return true
+	}
+
+	return false
 }
 
 func (b BoardType) GetPrettyName() string {
@@ -44,4 +61,6 @@ type SBC interface {
 	GetSubModel() string
 	GetRAM() int
 	GetPrettyName() string
+	GetBaseModel() *BoardType
+	IsBoardType(SBC) bool
 }

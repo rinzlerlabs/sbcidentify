@@ -44,5 +44,5 @@ func IsBoardType(boardType boardtype.SBC) bool {
 	if err != nil {
 		return false
 	}
-	return board == boardType
+	return board.IsBoardType(boardType)
 }

@@ -1,15 +1,17 @@
 package raspberrypi
 
 import (
+	"fmt"
 	"log/slog"
 	"os"
 	"os/exec"
 	"testing"
 
+	"github.com/thegreatco/sbcidentify/boardtype"
 	"github.com/thegreatco/sbcidentify/identifier"
 )
 
-func setup(t *testing.T) *slog.Logger {
+func setup(t *testing.T) (*slog.Logger, identifier.BoardIdentifier) {
 	t.Helper()
 	execLookPath = exec.LookPath
 	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
@@ -21,11 +23,11 @@ func setup(t *testing.T) *slog.Logger {
 	if board.GetManufacturer() != "Raspberry Pi" {
 		t.Skip("Not a Raspberry Pi")
 	}
-	return logger
+	return logger, id
 }
 
 func TestGetInstalledRAM(t *testing.T) {
-	logger := setup(t)
+	logger, _ := setup(t)
 	ram, err := getInstalledRAM(logger)
 	if err != nil {
 		t.Fatalf("getInstalledRAM() failed: %v", err)
@@ -42,7 +44,7 @@ func TestGetInstalledRAM(t *testing.T) {
 }
 
 func TestParseVcgencmdMemoryOutput(t *testing.T) {
-	logger := setup(t)
+	logger, _ := setup(t)
 
 	tests := []struct {
 		input  string
@@ -65,6 +67,29 @@ func TestParseVcgencmdMemoryOutput(t *testing.T) {
 			}
 			if ram != test.output {
 				t.Fatalf("parseVcgencmdMemoryOutput() returned %d, expected %d", ram, test.output)
+			}
+		})
+	}
+}
+
+func TestIsBoardType(t *testing.T) {
+	tests := []struct {
+		left     boardtype.SBC
+		right    boardtype.SBC
+		expected bool
+	}{
+		{RaspberryPi4B, RaspberryPi4B8GB, true},
+		{RaspberryPi4B8GB, RaspberryPi4B, false},
+		{RaspberryPi3B, RaspberryPi4B, false},
+		{RaspberryPi3B, RaspberryPi3BPlus, true},
+		{RaspberryPi3BPlus, RaspberryPi3B, false},
+		{RaspberryPi5B, RaspberryPi5B4GB, true},
+	}
+
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("%v is %v", test.left.GetPrettyName(), test.right.GetPrettyName()), func(t *testing.T) {
+			if test.left.IsBoardType(test.right) != test.expected {
+				t.Fatalf("IsBoardType() returned %v, expected %v", !test.expected, test.expected)
 			}
 		})
 	}

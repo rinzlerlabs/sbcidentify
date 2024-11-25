@@ -22,46 +22,41 @@ const (
 type NVIDIA struct{ boardtype.BoardType }
 type Jetson struct{ NVIDIA }
 type JetsonOrin struct{ Jetson }
-type JetsonOrinNX struct{ JetsonOrin }
-type JetsonOrinNano struct{ JetsonOrin }
-type JetsonAGX struct{ Jetson }
-type JetsonAGXXavier struct{ JetsonAGX }
 type JetsonXavier struct{ Jetson }
-type JetsonXavierNX struct{ JetsonXavier }
-type JetsonNano struct{ Jetson }
-type JetsonTX2 struct{ Jetson }
-type ClaraAGX struct{ NVIDIA }
-type ShieldTV struct{ NVIDIA }
 
 var (
-	jetsonOrinNX16GB              = JetsonOrinNX{JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Orin NX", RAM: 16384}}}}}
-	jetsonOrinNX8GB               = JetsonOrinNX{JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Orin NX", RAM: 8192}}}}}
-	jetsonOrinNano8GB             = JetsonOrinNano{JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Orin Nano", RAM: 8192}}}}}
-	jetsonOrinNano4GB             = JetsonOrinNano{JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Orin Nano", RAM: 4096}}}}}
-	jetsonOrinNanoDeveloperKit    = JetsonOrinNano{JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Orin Nano Developer Kit", RAM: 8192}}}}}
-	jetsonAGXOrin                 = JetsonAGX{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Orin", RAM: 0}}}}
-	jetsonAGXOrin32GB             = JetsonAGX{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Orin", RAM: 32768}}}}
-	jetsonAGXOrin64GB             = JetsonAGX{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Orin", RAM: 65536}}}}
-	jetsonXavierNXDeveloperKit    = JetsonXavierNX{JetsonXavier{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Xavier NX Developer Kit", RAM: 0}}}}}
-	jetsonXavierNX8GB             = JetsonXavierNX{JetsonXavier{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Xavier NX", RAM: 8192}}}}}
-	jetsonXavierNX16GB            = JetsonXavierNX{JetsonXavier{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Xavier NX", RAM: 16384}}}}}
-	jetsonAGXXavier8GB            = JetsonAGXXavier{JetsonAGX{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Xavier", RAM: 8192}}}}}
-	jetsonAGXXavier               = JetsonAGXXavier{JetsonAGX{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Xavier", RAM: 0}}}}}
-	jetsonAGXXavier16GB           = JetsonAGXXavier{JetsonAGX{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Xavier", RAM: 16384}}}}}
-	jetsonAGXXavier32GB           = JetsonAGXXavier{JetsonAGX{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Xavier", RAM: 32768}}}}}
-	jetsonAGXXavier64GB           = JetsonAGXXavier{JetsonAGX{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Xavier", RAM: 65536}}}}}
-	jetsonAGXXavierIndustrial32GB = JetsonAGXXavier{JetsonAGX{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Xavier Industrial", RAM: 32768}}}}}
-	jetsonNanoDeveloperKit        = JetsonNano{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Nano Developer Kit", RAM: 0}}}}
-	jetsonNano2GB                 = JetsonNano{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Nano", RAM: 2048}}}}
-	jetsonNano16GbEMMC            = JetsonNano{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Nano", RAM: 0}}}}
-	jetsonNano4GB                 = JetsonNano{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Nano", RAM: 4096}}}}
-	jetsonTX2NX                   = JetsonTX2{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "TX2 NX", RAM: 0}}}}
-	jetsonTX24GB                  = JetsonTX2{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "TX2", RAM: 4096}}}}
-	jetsonTX2i                    = JetsonTX2{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "TX2i", RAM: 0}}}}
-	jetsonTX2                     = JetsonTX2{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "TX2", RAM: 0}}}}
-	jetsonTX1                     = JetsonTX2{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "TX1", RAM: 0}}}}
-	claraAGX                      = ClaraAGX{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Clara", SubModel: "AGX", RAM: 0}}}
-	shieldTV                      = ShieldTV{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Shield", SubModel: "TV", RAM: 0}}}
+	JetsonOrinNX                  = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Orin NX", RAM: 0}}}}
+	JetsonOrinNX16GB              = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Orin NX", RAM: 16384, BaseModel: &JetsonOrinNX.BoardType}}}}
+	JetsonOrinNX8GB               = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Orin NX", RAM: 8192}}}}
+	JetsonOrinNano                = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Orin Nano", RAM: 0}}}}
+	JetsonOrinNano8GB             = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Orin Nano", RAM: 8192, BaseModel: &JetsonOrinNano.BoardType}}}}
+	JetsonOrinNano4GB             = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Orin Nano", RAM: 4096, BaseModel: &JetsonOrinNano.BoardType}}}}
+	JetsonOrinNanoDeveloperKit    = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Orin Nano Developer Kit", RAM: 8192, BaseModel: &JetsonOrinNano.BoardType}}}}
+	JetsonAGXOrin                 = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Orin", RAM: 0}}}}
+	JetsonAGXOrin32GB             = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Orin", RAM: 32768, BaseModel: &JetsonAGXOrin.BoardType}}}}
+	JetsonAGXOrin64GB             = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Orin", RAM: 65536, BaseModel: &JetsonAGXOrin.BoardType}}}}
+	JetsonXavierNX                = JetsonXavier{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Xavier NX", RAM: 0}}}}
+	JetsonXavierNXDeveloperKit    = JetsonXavier{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Xavier NX Developer Kit", RAM: 0, BaseModel: &JetsonXavierNX.BoardType}}}}
+	JetsonXavierNX8GB             = JetsonXavier{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Xavier NX", RAM: 8192, BaseModel: &JetsonXavierNX.BoardType}}}}
+	JetsonXavierNX16GB            = JetsonXavier{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Xavier NX", RAM: 16384, BaseModel: &JetsonXavierNX.BoardType}}}}
+	JetsonAGXXavier               = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Xavier", RAM: 0}}}}
+	JetsonAGXXavier8GB            = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Xavier", RAM: 8192, BaseModel: &JetsonAGXXavier.BoardType}}}}
+	JetsonAGXXavier16GB           = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Xavier", RAM: 16384, BaseModel: &JetsonAGXXavier.BoardType}}}}
+	JetsonAGXXavier32GB           = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Xavier", RAM: 32768, BaseModel: &JetsonAGXXavier.BoardType}}}}
+	JetsonAGXXavier64GB           = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Xavier", RAM: 65536, BaseModel: &JetsonAGXXavier.BoardType}}}}
+	JetsonAGXXavierIndustrial32GB = JetsonOrin{Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "AGX Xavier Industrial", RAM: 32768, BaseModel: &JetsonAGXXavier.BoardType}}}}
+	JetsonNano                    = Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Nano", RAM: 0}}}
+	JetsonNanoDeveloperKit        = Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Nano Developer Kit", RAM: 0, BaseModel: &JetsonNano.BoardType}}}
+	JetsonNano2GB                 = Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Nano", RAM: 2048, BaseModel: &JetsonNano.BoardType}}}
+	JetsonNano16GbEMMC            = Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Nano", RAM: 0, BaseModel: &JetsonNano.BoardType}}}
+	JetsonNano4GB                 = Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "Nano", RAM: 4096, BaseModel: &JetsonNano.BoardType}}}
+	JetsonTX2NX                   = Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "TX2 NX", RAM: 0}}}
+	JetsonTX24GB                  = Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "TX2", RAM: 4096, BaseModel: &JetsonTX2.BoardType}}}
+	JetsonTX2i                    = Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "TX2i", RAM: 0, BaseModel: &JetsonTX2.BoardType}}}
+	JetsonTX2                     = Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "TX2", RAM: 0}}}
+	JetsonTX1                     = Jetson{NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Jetson", SubModel: "TX1", RAM: 0}}}
+	ClaraAGX                      = NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Clara", SubModel: "AGX", RAM: 0}}
+	ShieldTV                      = NVIDIA{boardtype.BoardType{Manufacturer: "NVIDIA", Model: "Shield", SubModel: "TV", RAM: 0}}
 )
 
 // NVIDIA Jetson AGX Orin Developer Kit
@@ -76,69 +71,69 @@ var (
 )
 
 var jetsonModulesByModelNumber = []jetson{
-	{"p3767-0000", jetsonOrinNX16GB},
-	{"p3767-0001", jetsonOrinNX8GB},
+	{"p3767-0000", JetsonOrinNX16GB},
+	{"p3767-0001", JetsonOrinNX8GB},
 
-	{"p3767-0003", jetsonOrinNano8GB},
-	{"p3767-0004", jetsonOrinNano4GB},
-	{"p3767-0005", jetsonOrinNanoDeveloperKit},
+	{"p3767-0003", JetsonOrinNano8GB},
+	{"p3767-0004", JetsonOrinNano4GB},
+	{"p3767-0005", JetsonOrinNanoDeveloperKit},
 
-	{"p3701-0000", jetsonAGXOrin},
-	{"p3701-0004", jetsonAGXOrin32GB},
-	{"p3701-0005", jetsonAGXOrin64GB},
+	{"p3701-0000", JetsonAGXOrin},
+	{"p3701-0004", JetsonAGXOrin32GB},
+	{"p3701-0005", JetsonAGXOrin64GB},
 
-	{"p3668-0000", jetsonXavierNXDeveloperKit},
-	{"p3668-0001", jetsonXavierNX8GB},
-	{"p3668-0003", jetsonXavierNX16GB},
+	{"p3668-0000", JetsonXavierNXDeveloperKit},
+	{"p3668-0001", JetsonXavierNX8GB},
+	{"p3668-0003", JetsonXavierNX16GB},
 
-	{"p2888-0001", jetsonAGXXavier16GB},
-	{"p2888-0003", jetsonAGXXavier32GB},
-	{"p2888-0004", jetsonAGXXavier32GB},
-	{"p2888-0005", jetsonAGXXavier64GB},
-	{"p2888-0006", jetsonAGXXavier8GB},
-	{"p2888-0008", jetsonAGXXavierIndustrial32GB},
-	{"p2972-0000", jetsonAGXXavier},
+	{"p2888-0001", JetsonAGXXavier16GB},
+	{"p2888-0003", JetsonAGXXavier32GB},
+	{"p2888-0004", JetsonAGXXavier32GB},
+	{"p2888-0005", JetsonAGXXavier64GB},
+	{"p2888-0006", JetsonAGXXavier8GB},
+	{"p2888-0008", JetsonAGXXavierIndustrial32GB},
+	{"p2972-0000", JetsonAGXXavier},
 
-	{"p2771-0000", jetsonTX2},
+	{"p2771-0000", JetsonTX2},
 
-	{"p3448-0000", jetsonNano4GB},
-	{"p3448-0002", jetsonNano16GbEMMC},
-	{"p3448-0003", jetsonNano2GB},
-	{"p3450-0000", jetsonNanoDeveloperKit},
+	{"p3448-0000", JetsonNano4GB},
+	{"p3448-0002", JetsonNano16GbEMMC},
+	{"p3448-0003", JetsonNano2GB},
+	{"p3450-0000", JetsonNanoDeveloperKit},
 
-	{"p3636-0001", jetsonTX2NX},
-	{"p3509-0000", jetsonTX2NX},
+	{"p3636-0001", JetsonTX2NX},
+	{"p3509-0000", JetsonTX2NX},
 
-	{"p3489-0888", jetsonTX24GB},
-	{"p3489-0000", jetsonTX2i},
-	{"p3310-1000", jetsonTX2},
+	{"p3489-0888", JetsonTX24GB},
+	{"p3489-0000", JetsonTX2i},
+	{"p3310-1000", JetsonTX2},
 
-	{"p2180-1000", jetsonTX1},
-	{"p2371-2180", jetsonTX1},
+	{"p2180-1000", JetsonTX1},
+	{"p2371-2180", JetsonTX1},
 
-	{"p2894-0050", shieldTV},
+	{"p2894-0050", ShieldTV},
 
-	{"p3904-0000", claraAGX},
+	{"p3904-0000", ClaraAGX},
 }
 
 var jetsonModulesByDeviceTreeBaseModel = []jetson{
-	{"NVIDIA Jetson Orin NX Engineering Reference Developer Kit", jetsonOrinNX16GB},
-	{"NVIDIA Jetson Orin Nano Developer Kit", jetsonOrinNanoDeveloperKit},
-	{"NVIDIA Jetson TX2 Developer Kit", jetsonTX2},
-	{"NVIDIA Jetson TX2", jetsonTX2},
-	{"NVIDIA Jetson TX2 NX Developer Kit", jetsonTX2NX},
-	{"NVIDIA Jetson AGX Xavier", jetsonAGXXavier},
-	{"NVIDIA Jetson AGX Xavier Developer Kit", jetsonAGXXavier},
-	{"NVIDIA Jetson Xavier NX Developer Kit (SD-card)", jetsonXavierNXDeveloperKit},
-	{"NVIDIA Jetson Xavier NX Developer Kit (eMMC)", jetsonXavierNXDeveloperKit},
-	{"NVIDIA Jetson Xavier NX (SD-card)", jetsonXavierNXDeveloperKit},
-	{"NVIDIA Jetson Xavier NX (eMMC)", jetsonXavierNX8GB},
-	{"NVIDIA Jetson TX1", jetsonTX1},
-	{"NVIDIA Jetson TX1 Developer Kit", jetsonTX1},
-	{"NVIDIA Shield TV", shieldTV},
-	{"NVIDIA Jetson Nano Developer Kit", jetsonNanoDeveloperKit},
-	{"NVIDIA Jetson AGX Orin Developer Kit", jetsonAGXOrin},
-	{"NVIDIA Jetson AGX Orin", jetsonAGXOrin},
+	{"NVIDIA Jetson Orin NX Engineering Reference Developer Kit", JetsonOrinNX16GB},
+	{"NVIDIA Jetson Orin Nano Developer Kit", JetsonOrinNanoDeveloperKit},
+	{"NVIDIA Jetson TX2 Developer Kit", JetsonTX2},
+	{"NVIDIA Jetson TX2", JetsonTX2},
+	{"NVIDIA Jetson TX2 NX Developer Kit", JetsonTX2NX},
+	{"NVIDIA Jetson AGX Xavier", JetsonAGXXavier},
+	{"NVIDIA Jetson AGX Xavier Developer Kit", JetsonAGXXavier},
+	{"NVIDIA Jetson Xavier NX Developer Kit (SD-card)", JetsonXavierNXDeveloperKit},
+	{"NVIDIA Jetson Xavier NX Developer Kit (eMMC)", JetsonXavierNXDeveloperKit},
+	{"NVIDIA Jetson Xavier NX (SD-card)", JetsonXavierNXDeveloperKit},
+	{"NVIDIA Jetson Xavier NX (eMMC)", JetsonXavierNX8GB},
+	{"NVIDIA Jetson TX1", JetsonTX1},
+	{"NVIDIA Jetson TX1 Developer Kit", JetsonTX1},
+	{"NVIDIA Shield TV", ShieldTV},
+	{"NVIDIA Jetson Nano Developer Kit", JetsonNanoDeveloperKit},
+	{"NVIDIA Jetson AGX Orin Developer Kit", JetsonAGXOrin},
+	{"NVIDIA Jetson AGX Orin", JetsonAGXOrin},
 }
 
 type jetsonIdentifier struct {

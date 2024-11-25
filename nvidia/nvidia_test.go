@@ -1,12 +1,14 @@
 package nvidia
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"log/slog"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/thegreatco/sbcidentify/boardtype"
 	"github.com/thegreatco/sbcidentify/identifier"
 )
 
@@ -41,4 +43,25 @@ func TestParseModelNameFromModuleName(t *testing.T) {
 	f, e := getModuleModelFromModuleName(logger, "tegra234-p3767-0003-p3768-0000-a0")
 	assert.NoError(t, e)
 	assert.Equal(t, "p3767-0003", f)
+}
+
+func TestIsBoardType(t *testing.T) {
+	tests := []struct {
+		left     boardtype.SBC
+		right    boardtype.SBC
+		expected bool
+	}{
+		{JetsonAGXOrin, JetsonAGXOrin64GB, true},
+		{JetsonAGXOrin64GB, JetsonAGXOrin, false},
+		{JetsonOrinNano, JetsonOrinNano8GB, true},
+		{JetsonOrinNano, JetsonAGXOrin, false},
+	}
+
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("%v is %v", test.left.GetPrettyName(), test.right.GetPrettyName()), func(t *testing.T) {
+			if test.left.IsBoardType(test.right) != test.expected {
+				t.Fatalf("IsBoardType() returned %v, expected %v", !test.expected, test.expected)
+			}
+		})
+	}
 }
