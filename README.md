@@ -10,12 +10,12 @@ Currently supported boards:
 
 Install the package with
 ```
-go get github.com/thegreatco/sbcidentify@latest
+go get github.com/rinzlerlabs/sbcidentify@latest
 ```
 
 To identify a board, simply import
 ```
-"github.com/thegreatco/sbcidentify"
+"github.com/rinzlerlabs/sbcidentify"
 ```
 Then to identify the board
 ```
@@ -26,7 +26,7 @@ board, err := sbcidentify.GetBoardType()
 
 To install the CLI version, simply run
 ```
-go install github.com/thegreatco/sbcidentify/cmd/sbcidentify@latest
+go install github.com/rinzlerlabs/sbcidentify/cmd/sbcidentify@latest
 ```
 
 Usage

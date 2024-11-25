@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/thegreatco/sbcidentify/boardtype"
-	"github.com/thegreatco/sbcidentify/identifier"
+	"github.com/rinzlerlabs/sbcidentify/boardtype"
+	"github.com/rinzlerlabs/sbcidentify/identifier"
 )
 
 func init() {

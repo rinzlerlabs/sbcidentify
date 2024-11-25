@@ -7,9 +7,9 @@ import (
 
 	"log/slog"
 
+	"github.com/rinzlerlabs/sbcidentify/boardtype"
+	"github.com/rinzlerlabs/sbcidentify/identifier"
 	"github.com/stretchr/testify/assert"
-	"github.com/thegreatco/sbcidentify/boardtype"
-	"github.com/thegreatco/sbcidentify/identifier"
 )
 
 func setup(t *testing.T) *slog.Logger {

@@ -5,10 +5,10 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/thegreatco/sbcidentify/boardtype"
-	"github.com/thegreatco/sbcidentify/identifier"
-	_ "github.com/thegreatco/sbcidentify/nvidia"
-	_ "github.com/thegreatco/sbcidentify/raspberrypi"
+	"github.com/rinzlerlabs/sbcidentify/boardtype"
+	"github.com/rinzlerlabs/sbcidentify/identifier"
+	_ "github.com/rinzlerlabs/sbcidentify/nvidia"
+	_ "github.com/rinzlerlabs/sbcidentify/raspberrypi"
 )
 
 var (

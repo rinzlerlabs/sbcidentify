@@ -7,8 +7,8 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/thegreatco/sbcidentify/boardtype"
-	"github.com/thegreatco/sbcidentify/identifier"
+	"github.com/rinzlerlabs/sbcidentify/boardtype"
+	"github.com/rinzlerlabs/sbcidentify/identifier"
 )
 
 func setup(t *testing.T) (*slog.Logger, identifier.BoardIdentifier) {

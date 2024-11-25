@@ -3,7 +3,7 @@ package identifier
 import (
 	"log/slog"
 
-	boardType "github.com/thegreatco/sbcidentify/boardtype"
+	boardType "github.com/rinzlerlabs/sbcidentify/boardtype"
 )
 
 type BoardIdentifier interface {
