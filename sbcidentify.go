@@ -7,8 +7,6 @@ import (
 
 	"github.com/rinzlerlabs/sbcidentify/boardtype"
 	"github.com/rinzlerlabs/sbcidentify/identifier"
-	_ "github.com/rinzlerlabs/sbcidentify/nvidia"
-	_ "github.com/rinzlerlabs/sbcidentify/raspberrypi"
 )
 
 var (
@@ -45,4 +43,16 @@ func IsBoardType(boardType boardtype.SBC) bool {
 		return false
 	}
 	return board.IsBoardType(boardType)
+}
+
+func IsRaspberryPi() bool {
+	return IsBoardType(boardtype.RaspberryPi)
+}
+
+func IsNvidia() bool {
+	return IsBoardType(boardtype.NVIDIA)
+}
+
+func IsJetson() bool {
+	return IsBoardType(boardtype.Jetson)
 }

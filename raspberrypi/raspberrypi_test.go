@@ -78,17 +78,17 @@ func TestIsBoardType(t *testing.T) {
 		Have     boardtype.SBC
 		expected bool
 	}{
-		{RaspberryPi, RaspberryPi4B8GB, true},
-		{RaspberryPi, RaspberryPi5B8GB, true},
-		{RaspberryPi3B, RaspberryPi4B, false},
-		{RaspberryPi3B, RaspberryPi3BPlus, true},
-		{RaspberryPi3BPlus, RaspberryPi3B, false},
-		{RaspberryPi4, RaspberryPi4B8GB, true},
-		{RaspberryPi4B, RaspberryPi4B8GB, true},
-		{RaspberryPi4B8GB, RaspberryPi4B, false},
-		{RaspberryPi4B4GB, RaspberryPi4B8GB, false},
-		{RaspberryPi5B, RaspberryPi5B4GB, true},
-		{RaspberryPi5B4GB, RaspberryPi5B, false},
+		{boardtype.RaspberryPi, boardtype.RaspberryPi4B8GB, true},
+		{boardtype.RaspberryPi, boardtype.RaspberryPi5B8GB, true},
+		{boardtype.RaspberryPi3B, boardtype.RaspberryPi4B, false},
+		{boardtype.RaspberryPi3B, boardtype.RaspberryPi3BPlus, true},
+		{boardtype.RaspberryPi3BPlus, boardtype.RaspberryPi3B, false},
+		{boardtype.RaspberryPi4, boardtype.RaspberryPi4B8GB, true},
+		{boardtype.RaspberryPi4B, boardtype.RaspberryPi4B8GB, true},
+		{boardtype.RaspberryPi4B8GB, boardtype.RaspberryPi4B, false},
+		{boardtype.RaspberryPi4B4GB, boardtype.RaspberryPi4B8GB, false},
+		{boardtype.RaspberryPi5B, boardtype.RaspberryPi5B4GB, true},
+		{boardtype.RaspberryPi5B4GB, boardtype.RaspberryPi5B, false},
 	}
 
 	for _, test := range tests {
