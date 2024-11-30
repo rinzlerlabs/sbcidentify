@@ -51,12 +51,12 @@ func TestIsBoardType(t *testing.T) {
 		Have     boardtype.SBC
 		expected bool
 	}{
-		{boardType.NVIDIA, boardType.JetsonAGXOrin64GB, true},
-		{boardType.Jetson, boardType.JetsonAGXOrin64GB, true},
-		{boardType.JetsonAGXOrin, boardType.JetsonAGXOrin64GB, true},
-		{boardType.JetsonAGXOrin64GB, boardType.JetsonAGXOrin, false},
-		{boardType.JetsonOrinNano, boardType.JetsonOrinNano8GB, true},
-		{boardType.JetsonOrinNano, boardType.JetsonAGXOrin, false},
+		{boardtype.NVIDIA, boardtype.JetsonAGXOrin64GB, true},
+		{boardtype.Jetson, boardtype.JetsonAGXOrin64GB, true},
+		{boardtype.JetsonAGXOrin, boardtype.JetsonAGXOrin64GB, true},
+		{boardtype.JetsonAGXOrin64GB, boardtype.JetsonAGXOrin, false},
+		{boardtype.JetsonOrinNano, boardtype.JetsonOrinNano8GB, true},
+		{boardtype.JetsonOrinNano, boardtype.JetsonAGXOrin, false},
 	}
 	for _, test := range tests {
 		t.Run(fmt.Sprintf("Want_%v_Have_%v", test.Want.GetPrettyName(), test.Have.GetPrettyName()), func(t *testing.T) {

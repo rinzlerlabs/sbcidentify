@@ -7,6 +7,9 @@ import (
 
 	"github.com/rinzlerlabs/sbcidentify/boardtype"
 	"github.com/rinzlerlabs/sbcidentify/identifier"
+
+	_ "github.com/rinzlerlabs/sbcidentify/boardtype/nvidia"
+	_ "github.com/rinzlerlabs/sbcidentify/boardtype/raspberrypi"
 )
 
 var (
@@ -25,6 +28,9 @@ func SetLogger(l *slog.Logger) {
 
 func GetBoardType() (boardtype.SBC, error) {
 	boardIdentifiers := identifier.BuildIdentifiers(logger)
+	if len(boardIdentifiers) == 0 {
+		panic("no board identifiers found")
+	}
 	var final error
 	for _, identifier := range boardIdentifiers {
 		board, err := identifier.GetBoardType()
@@ -40,6 +46,10 @@ func GetBoardType() (boardtype.SBC, error) {
 func IsBoardType(boardType boardtype.SBC) bool {
 	board, err := GetBoardType()
 	if err != nil {
+		return false
+	}
+	if board == nil {
+		logger.Debug("board is nil, this is unexpected")
 		return false
 	}
 	return board.IsBoardType(boardType)

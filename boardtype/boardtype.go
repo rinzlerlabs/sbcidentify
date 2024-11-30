@@ -1,6 +1,8 @@
 package boardtype
 
-import "strconv"
+import (
+	"strconv"
+)
 
 type BoardType struct {
 	Manufacturer string
