@@ -78,6 +78,9 @@ func (r raspberryPiIdentifier) GetBoardType() (boardtype.SBC, error) {
 			subModels = append(subModels, m)
 		}
 	}
+	if len(subModels) == 0 {
+		return nil, ErrCannotIdentifyBoard
+	}
 	ramMb, err := getInstalledRAM(r.logger)
 	if err == ErrVcgencmdNotFound {
 		r.logger.Debug("vcgencmd not found, using fallback", slog.String("model", dtbm), slog.Int("ram", ramMb), slog.Any("fallback", subModels[0].Fallback))
