@@ -163,7 +163,7 @@ func getBoardTypeFromModuleModel(logger *slog.Logger) (boardtype.SBC, error) {
 		return nil, err
 	}
 	for _, m := range jetsonModulesByModelNumber {
-		if m.Model == moduleModel {
+		if strings.Contains(moduleModel, m.Model) {
 			return m.Type, nil
 		}
 	}
