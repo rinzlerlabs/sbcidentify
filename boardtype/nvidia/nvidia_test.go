@@ -111,10 +111,10 @@ func TestRefineByInstalledRAM(t *testing.T) {
 	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
 
 	tests := []struct {
-		name      string
-		totalKB   int
-		board     boardtype.SBC
-		want      boardtype.SBC
+		name    string
+		totalKB int
+		board   boardtype.SBC
+		want    boardtype.SBC
 	}{
 		// AGX Orin Developer Kit: p3701-0000 with 32GB RAM.
 		// /proc/meminfo shows ~30-31 GB after NVIDIA carveouts.

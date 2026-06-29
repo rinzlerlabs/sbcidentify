@@ -14,10 +14,10 @@ import (
 
 // cliHandler formats log records as: <time> <LEVEL> <message> key=value ...
 type cliHandler struct {
-	w      io.Writer
-	level  slog.Level
-	mu     sync.Mutex
-	prefix string // built from WithGroup calls
+	w        io.Writer
+	level    slog.Level
+	mu       sync.Mutex
+	prefix   string      // built from WithGroup calls
 	preAttrs []slog.Attr // built from WithAttrs calls
 }
 

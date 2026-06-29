@@ -3,8 +3,8 @@ package boardtype_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/rinzlerlabs/sbcidentify/boardtype"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetPrettyName(t *testing.T) {
