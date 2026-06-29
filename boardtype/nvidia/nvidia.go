@@ -45,6 +45,7 @@ var jetsonRAMRefinementCandidates = []boardtype.SBC{
 func getInstalledRAMMB(logger *slog.Logger) (int, error) {
 	data, err := os.ReadFile(memInfoPath)
 	if err != nil {
+		logger.Debug("failed to read the meminfo file", slog.Any("error", err))
 		return 0, err
 	}
 	for _, line := range strings.Split(string(data), "\n") {
@@ -53,10 +54,12 @@ func getInstalledRAMMB(logger *slog.Logger) (int, error) {
 		}
 		fields := strings.Fields(line)
 		if len(fields) < 2 {
+			logger.Debug("found fewer than 2 fields, unable to parse total memory", slog.String("line", line))
 			return 0, fmt.Errorf("unexpected MemTotal format: %s", line)
 		}
 		kb, err := strconv.Atoi(fields[1])
 		if err != nil {
+			logger.Debug("failed to parse MemTotal value", slog.String("value", fields[1]), slog.Any("error", err))
 			return 0, fmt.Errorf("failed to parse MemTotal: %w", err)
 		}
 		return kb / 1024, nil
