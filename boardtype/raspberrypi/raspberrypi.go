@@ -74,10 +74,21 @@ func (r raspberryPiIdentifier) GetBoardType() (boardtype.SBC, error) {
 	} else if err != nil {
 		return nil, err
 	}
+	var ramMatches []raspberryPi
 	for _, m := range subModels {
 		if m.Memory == ramMb {
-			return m.Type, nil
+			ramMatches = append(ramMatches, m)
 		}
+	}
+	if len(ramMatches) > 1 {
+		names := make([]string, len(ramMatches))
+		for i, m := range ramMatches {
+			names[i] = m.Type.GetPrettyName()
+		}
+		r.logger.Warn("multiple RAM matches, using first", slog.String("model", dtbm), slog.Int("ram_mb", ramMb), slog.Any("matches", names))
+	}
+	if len(ramMatches) > 0 {
+		return ramMatches[0].Type, nil
 	}
 	r.logger.Debug("no matching model found, using fallback", slog.String("model", dtbm), slog.Int("ram", ramMb), slog.Int("subModels", len(subModels)), slog.Any("subModels", subModels), slog.Any("fallback", subModels[0].Fallback))
 	return subModels[0].Fallback, nil

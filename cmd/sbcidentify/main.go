@@ -1,58 +1,80 @@
 package main
 
 import (
+	"context"
 	"flag"
+	"fmt"
+	"io"
 	"log/slog"
 	"os"
-
-	"fmt"
+	"sync"
 
 	"github.com/rinzlerlabs/sbcidentify"
 )
 
+// cliHandler formats log records as: <time> <LEVEL> <message>
+type cliHandler struct {
+	w     io.Writer
+	level slog.Level
+	mu    sync.Mutex
+}
+
+func (h *cliHandler) Enabled(_ context.Context, level slog.Level) bool {
+	return level >= h.level
+}
+
+func (h *cliHandler) Handle(_ context.Context, r slog.Record) error {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	_, err := fmt.Fprintf(h.w, "%s %s %s\n",
+		r.Time.Format("2006-01-02T15:04:05.999Z07:00"),
+		r.Level,
+		r.Message,
+	)
+	return err
+}
+
+func (h *cliHandler) WithAttrs([]slog.Attr) slog.Handler { return h }
+func (h *cliHandler) WithGroup(string) slog.Handler       { return h }
+
 func main() {
-	debug := flag.Bool("d", false, "Enable debug logging")
-	output := flag.String("o", "StdOut", "Specify the log output, accept StdOut, StdErr, or a file path")
+	verbose := flag.Bool("v", false, "Enable verbose logging")
+	output := flag.String("o", "StdErr", "Log output: StdOut, StdErr, or a file path")
 	flag.Parse()
 
-	logLevel := new(slog.LevelVar)
-	if *debug {
-		logLevel.Set(slog.LevelDebug)
-	} else {
-		logLevel.Set(slog.LevelInfo)
+	level := slog.LevelInfo
+	if *verbose {
+		level = slog.LevelDebug
 	}
 
-	handlerConfig := &sbcidentify.HandlerConfig{Level: logLevel}
-
-	var logger *slog.Logger
+	var w io.Writer
 	switch *output {
 	case "StdOut":
-		logger = slog.New(sbcidentify.NewLogHandler(os.Stdout, handlerConfig))
+		w = os.Stdout
 	case "StdErr":
-		logger = slog.New(sbcidentify.NewLogHandler(os.Stderr, handlerConfig))
+		w = os.Stderr
 	default:
 		file, err := os.OpenFile(*output, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
-			panic(err)
+			fmt.Fprintf(os.Stderr, "cannot open log file: %v\n", err)
+			os.Exit(1)
 		}
 		defer file.Close()
-		logger = slog.New(sbcidentify.NewLogHandler(file, handlerConfig))
+		w = file
 	}
 
-	sbcidentify.SetLogger(logger.With("source", "sbcidentify"))
+	slog.SetDefault(slog.New(&cliHandler{w: w, level: level}))
 
 	board, err := sbcidentify.GetBoardType()
 	if err != nil {
 		if errList, ok := err.(interface{ Unwrap() []error }); ok {
-			// Access the slice of errors
-			errs := errList.Unwrap()
-			for _, e := range errs {
-				fmt.Printf("Error: %v\n", e)
+			for _, e := range errList.Unwrap() {
+				fmt.Fprintf(os.Stderr, "Error: %v\n", e)
 			}
 		} else {
-			fmt.Printf("Error: %v\n", err)
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		}
-	} else {
-		fmt.Println(board.GetPrettyName())
+		os.Exit(1)
 	}
+	fmt.Println(board.GetPrettyName())
 }

@@ -25,4 +25,7 @@ var raspberryPiModels = []raspberryPi{
 	{"Raspberry Pi Compute Module 5", 2048, boardtype.RaspberryPiCM52GB, boardtype.RaspberryPi5B},
 	{"Raspberry Pi Compute Module 5", 4096, boardtype.RaspberryPiCM54GB, boardtype.RaspberryPi5B},
 	{"Raspberry Pi Compute Module 5", 8192, boardtype.RaspberryPiCM58GB, boardtype.RaspberryPi5B},
+	{"Raspberry Pi Compute Module 5 Lite", 2048, boardtype.RaspberryPiCM5Lite2GB, boardtype.RaspberryPiCM5Lite},
+	{"Raspberry Pi Compute Module 5 Lite", 4096, boardtype.RaspberryPiCM5Lite4GB, boardtype.RaspberryPiCM5Lite},
+	{"Raspberry Pi Compute Module 5 Lite", 8192, boardtype.RaspberryPiCM5Lite8GB, boardtype.RaspberryPiCM5Lite},
 }

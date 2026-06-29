@@ -14,6 +14,7 @@
       "model": "",
       "subModel": "",
       "ram": 0,
+      "soc": "",
       "parent": ""
     },
     {
@@ -22,6 +23,7 @@
       "model": "Jetson",
       "subModel": "",
       "ram": 0,
+      "soc": "",
       "parent": "NVIDIA"
     },
     {
@@ -30,6 +32,7 @@
       "model": "Jetson",
       "subModel": "Orin",
       "ram": 0,
+      "soc": "Tegra234",
       "parent": "Jetson"
     },
     {
@@ -38,6 +41,7 @@
       "model": "Jetson",
       "subModel": "Xavier",
       "ram": 0,
+      "soc": "Tegra194",
       "parent": "Jetson"
     },
     {
@@ -46,6 +50,7 @@
       "model": "Jetson",
       "subModel": "Orin NX",
       "ram": 0,
+      "soc": "Tegra234",
       "parent": "JetsonOrin"
     },
     {
@@ -54,6 +59,7 @@
       "model": "Jetson",
       "subModel": "Orin NX",
       "ram": 16384,
+      "soc": "Tegra234",
       "parent": "JetsonOrinNX"
     },
     {
@@ -62,6 +68,7 @@
       "model": "Jetson",
       "subModel": "Orin NX",
       "ram": 8192,
+      "soc": "Tegra234",
       "parent": "JetsonOrinNX"
     },
     {
@@ -70,6 +77,7 @@
       "model": "Jetson",
       "subModel": "Orin Nano",
       "ram": 0,
+      "soc": "Tegra234",
       "parent": "JetsonOrin"
     },
     {
@@ -78,6 +86,7 @@
       "model": "Jetson",
       "subModel": "Orin Nano",
       "ram": 8192,
+      "soc": "Tegra234",
       "parent": "JetsonOrinNano"
     },
     {
@@ -86,6 +95,7 @@
       "model": "Jetson",
       "subModel": "Orin Nano",
       "ram": 4096,
+      "soc": "Tegra234",
       "parent": "JetsonOrinNano"
     },
     {
@@ -94,6 +104,7 @@
       "model": "Jetson",
       "subModel": "Orin Nano Developer Kit",
       "ram": 8192,
+      "soc": "Tegra234",
       "parent": "JetsonOrinNano"
     },
     {
@@ -102,6 +113,7 @@
       "model": "Jetson",
       "subModel": "AGX Orin",
       "ram": 0,
+      "soc": "Tegra234",
       "parent": "Jetson"
     },
     {
@@ -110,6 +122,7 @@
       "model": "Jetson",
       "subModel": "AGX Orin",
       "ram": 32768,
+      "soc": "Tegra234",
       "parent": "JetsonAGXOrin"
     },
     {
@@ -118,6 +131,7 @@
       "model": "Jetson",
       "subModel": "AGX Orin",
       "ram": 65536,
+      "soc": "Tegra234",
       "parent": "JetsonAGXOrin"
     },
     {
@@ -126,6 +140,7 @@
       "model": "Jetson",
       "subModel": "Xavier NX",
       "ram": 0,
+      "soc": "Tegra194",
       "parent": "Jetson"
     },
     {
@@ -134,6 +149,7 @@
       "model": "Jetson",
       "subModel": "Xavier NX Developer Kit",
       "ram": 0,
+      "soc": "Tegra194",
       "parent": "JetsonXavierNX"
     },
     {
@@ -142,6 +158,7 @@
       "model": "Jetson",
       "subModel": "Xavier NX",
       "ram": 8192,
+      "soc": "Tegra194",
       "parent": "JetsonXavierNX"
     },
     {
@@ -150,6 +167,7 @@
       "model": "Jetson",
       "subModel": "Xavier NX",
       "ram": 16384,
+      "soc": "Tegra194",
       "parent": "JetsonXavierNX"
     },
     {
@@ -158,6 +176,7 @@
       "model": "Jetson",
       "subModel": "AGX Xavier",
       "ram": 0,
+      "soc": "Tegra194",
       "parent": "Jetson"
     },
     {
@@ -166,6 +185,7 @@
       "model": "Jetson",
       "subModel": "AGX Xavier",
       "ram": 8192,
+      "soc": "Tegra194",
       "parent": "JetsonAGXXavier"
     },
     {
@@ -174,6 +194,7 @@
       "model": "Jetson",
       "subModel": "AGX Xavier",
       "ram": 16384,
+      "soc": "Tegra194",
       "parent": "JetsonAGXXavier"
     },
     {
@@ -182,6 +203,7 @@
       "model": "Jetson",
       "subModel": "AGX Xavier",
       "ram": 32768,
+      "soc": "Tegra194",
       "parent": "JetsonAGXXavier"
     },
     {
@@ -190,6 +212,7 @@
       "model": "Jetson",
       "subModel": "AGX Xavier",
       "ram": 65536,
+      "soc": "Tegra194",
       "parent": "JetsonAGXXavier"
     },
     {
@@ -198,6 +221,7 @@
       "model": "Jetson",
       "subModel": "AGX Xavier Industrial",
       "ram": 32768,
+      "soc": "Tegra194",
       "parent": "JetsonAGXXavier"
     },
     {
@@ -206,6 +230,7 @@
       "model": "Jetson",
       "subModel": "Nano",
       "ram": 0,
+      "soc": "Tegra210",
       "parent": "Jetson"
     },
     {
@@ -214,6 +239,7 @@
       "model": "Jetson",
       "subModel": "Nano Developer Kit",
       "ram": 0,
+      "soc": "Tegra210",
       "parent": "JetsonNano"
     },
     {
@@ -222,6 +248,7 @@
       "model": "Jetson",
       "subModel": "Nano",
       "ram": 2048,
+      "soc": "Tegra210",
       "parent": "JetsonNano"
     },
     {
@@ -230,6 +257,7 @@
       "model": "Jetson",
       "subModel": "Nano",
       "ram": 0,
+      "soc": "Tegra210",
       "parent": "JetsonNano"
     },
     {
@@ -238,6 +266,7 @@
       "model": "Jetson",
       "subModel": "Nano",
       "ram": 4096,
+      "soc": "Tegra210",
       "parent": "JetsonNano"
     },
     {
@@ -246,6 +275,7 @@
       "model": "Jetson",
       "subModel": "TX2",
       "ram": 0,
+      "soc": "Tegra186",
       "parent": "Jetson"
     },
     {
@@ -254,6 +284,7 @@
       "model": "Jetson",
       "subModel": "TX2i",
       "ram": 0,
+      "soc": "Tegra186",
       "parent": "JetsonTX2"
     },
     {
@@ -262,6 +293,7 @@
       "model": "Jetson",
       "subModel": "TX2",
       "ram": 4096,
+      "soc": "Tegra186",
       "parent": "JetsonTX2"
     },
     {
@@ -270,6 +302,7 @@
       "model": "Jetson",
       "subModel": "TX2 NX",
       "ram": 0,
+      "soc": "Tegra186",
       "parent": "Jetson"
     },
     {
@@ -278,6 +311,7 @@
       "model": "Jetson",
       "subModel": "TX1",
       "ram": 0,
+      "soc": "Tegra210",
       "parent": "Jetson"
     },
     {
@@ -286,6 +320,7 @@
       "model": "Clara",
       "subModel": "AGX",
       "ram": 0,
+      "soc": "Tegra194",
       "parent": "NVIDIA"
     },
     {
@@ -294,6 +329,7 @@
       "model": "Shield",
       "subModel": "TV",
       "ram": 0,
+      "soc": "Tegra210",
       "parent": "NVIDIA"
     }
   ],

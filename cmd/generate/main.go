@@ -26,6 +26,7 @@ type BoardEntry struct {
 	Model        string `json:"model"`
 	SubModel     string `json:"subModel"`
 	RAM          int    `json:"ram"`
+	SOC          string `json:"soc"`
 	Parent       string `json:"parent"`
 }
 
@@ -67,7 +68,7 @@ var boardsTmpl = template.Must(template.New("boards").Parse(
 package boardtype
 
 var (
-{{range .Boards}}	{{.VarName}} = BoardType{Manufacturer: {{printf "%q" .Manufacturer}}, Model: {{printf "%q" .Model}}, SubModel: {{printf "%q" .SubModel}}, RAM: {{.RAM}}{{if .Parent}}, BaseModel: &{{.Parent}}{{end}}}
+{{range .Boards}}	{{.VarName}} = BoardType{Manufacturer: {{printf "%q" .Manufacturer}}, Model: {{printf "%q" .Model}}, SubModel: {{printf "%q" .SubModel}}, RAM: {{.RAM}}{{if .SOC}}, SOC: {{printf "%q" .SOC}}{{end}}{{if .Parent}}, BaseModel: &{{.Parent}}{{end}}}
 {{end}})
 `))
 

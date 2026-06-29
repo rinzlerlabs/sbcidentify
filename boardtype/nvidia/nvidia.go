@@ -2,9 +2,11 @@ package nvidia
 
 import (
 	"errors"
+	"fmt"
 	"log/slog"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/rinzlerlabs/sbcidentify/boardtype"
@@ -29,6 +31,100 @@ var (
 	ErrCannotIdentifyBoard = errors.New("cannot identify NVIDIA board")
 )
 
+// memInfoPath is a var so tests can swap it for a temp file.
+var memInfoPath = "/proc/meminfo"
+
+// jetsonRAMRefinementCandidates lists boards where detection returns a generic
+// result (RAM==0) and installed RAM can narrow it down. Currently covers the
+// AGX Orin Developer Kit, which uses module ID p3701-0000 for all RAM configs.
+var jetsonRAMRefinementCandidates = []boardtype.SBC{
+	boardtype.JetsonAGXOrin32GB,
+	boardtype.JetsonAGXOrin64GB,
+}
+
+func getInstalledRAMMB(logger *slog.Logger) (int, error) {
+	data, err := os.ReadFile(memInfoPath)
+	if err != nil {
+		return 0, err
+	}
+	for _, line := range strings.Split(string(data), "\n") {
+		if !strings.HasPrefix(line, "MemTotal:") {
+			continue
+		}
+		fields := strings.Fields(line)
+		if len(fields) < 2 {
+			return 0, fmt.Errorf("unexpected MemTotal format: %s", line)
+		}
+		kb, err := strconv.Atoi(fields[1])
+		if err != nil {
+			return 0, fmt.Errorf("failed to parse MemTotal: %w", err)
+		}
+		return kb / 1024, nil
+	}
+	return 0, fmt.Errorf("MemTotal not found in /proc/meminfo")
+}
+
+// refineByInstalledRAM upgrades a generic board (RAM==0) to the most specific
+// known variant by reading actual installed RAM from /proc/meminfo and picking
+// the closest match from jetsonRAMRefinementCandidates.
+func refineByInstalledRAM(logger *slog.Logger, board boardtype.SBC) boardtype.SBC {
+	if board.GetRAM() != 0 {
+		return board
+	}
+	ram, err := getInstalledRAMMB(logger)
+	if err != nil {
+		logger.Debug("cannot read installed RAM, using generic board type", slog.Any("error", err))
+		return board
+	}
+	logger.Debug("installed RAM", slog.Int("mb", ram))
+
+	var best boardtype.SBC
+	bestDiff := int(^uint(0) >> 1)
+	for _, candidate := range jetsonRAMRefinementCandidates {
+		if candidate.GetRAM() == 0 || !candidate.IsBoardType(board) {
+			continue
+		}
+		diff := candidate.GetRAM() - ram
+		if diff < 0 {
+			diff = -diff
+		}
+		if diff < bestDiff {
+			best = candidate
+			bestDiff = diff
+		}
+	}
+	if best != nil {
+		logger.Debug("refined board type by installed RAM", slog.String("type", best.GetPrettyName()))
+		return best
+	}
+	return board
+}
+
+// collectMatches returns all unique board types from table whose Model is a
+// substring of input. Deduplicates by pretty name so overlapping patterns that
+// resolve to the same board don't produce a spurious warning.
+func collectMatches(logger *slog.Logger, input string, table []jetson) []boardtype.SBC {
+	seen := make(map[string]bool)
+	var matches []boardtype.SBC
+	for _, m := range table {
+		if strings.Contains(input, m.Model) {
+			key := m.Type.GetPrettyName()
+			if !seen[key] {
+				seen[key] = true
+				matches = append(matches, m.Type)
+			}
+		}
+	}
+	if len(matches) > 1 {
+		names := make([]string, len(matches))
+		for i, m := range matches {
+			names[i] = m.GetPrettyName()
+		}
+		logger.Warn("multiple board matches, using first", slog.String("input", input), slog.Any("matches", names))
+	}
+	return matches
+}
+
 type jetsonIdentifier struct {
 	logger *slog.Logger
 }
@@ -50,36 +146,21 @@ func (r jetsonIdentifier) GetBoardType() (boardtype.SBC, error) {
 	if err == ErrDtsFileDoesNotExist {
 		r.logger.Debug("DTS file does not exist, falling back to device tree base model")
 		boardType, err = getBoardTypeByDeviceTreeBaseModel(r.logger)
-		if err == identifier.ErrCannotIdentifyBoard {
-			r.logger.Debug("unknown board")
-			return nil, ErrCannotIdentifyBoard
-		} else if err != nil {
-			r.logger.Debug("error getting board type", slog.Any("error", err))
-			return nil, err
-		} else {
-			r.logger.Debug("board type", slog.String("type", string(boardType.GetPrettyName())))
-			return boardType, nil
-		}
 	} else if err == identifier.ErrCannotIdentifyBoard {
-		r.logger.Debug("unknown board, falling back to device tree base model")
+		r.logger.Debug("unknown board from DTS, falling back to device tree base model")
 		boardType, err = getBoardTypeByDeviceTreeBaseModel(r.logger)
-		if err == identifier.ErrCannotIdentifyBoard {
-			r.logger.Debug("unknown board")
-			return nil, ErrCannotIdentifyBoard
-		} else if err != nil {
-			r.logger.Debug("error getting board type", slog.Any("error", err))
-			return nil, err
-		} else {
-			r.logger.Debug("board type", slog.String("type", string(boardType.GetPrettyName())))
-			return boardType, nil
-		}
-	} else if err != nil {
+	}
+	if err == identifier.ErrCannotIdentifyBoard || err == ErrCannotIdentifyBoard {
+		r.logger.Debug("unknown board")
+		return nil, ErrCannotIdentifyBoard
+	}
+	if err != nil {
 		r.logger.Debug("error getting board type", slog.Any("error", err))
 		return nil, err
-	} else {
-		r.logger.Debug("board type", slog.String("type", string(boardType.GetPrettyName())))
-		return boardType, nil
 	}
+	boardType = refineByInstalledRAM(r.logger, boardType)
+	r.logger.Debug("board type", slog.String("type", boardType.GetPrettyName()))
+	return boardType, nil
 }
 
 func getBoardTypeFromModuleModel(logger *slog.Logger) (boardtype.SBC, error) {
@@ -95,12 +176,11 @@ func getBoardTypeFromModuleModel(logger *slog.Logger) (boardtype.SBC, error) {
 	if err != nil {
 		return nil, err
 	}
-	for _, m := range jetsonModulesByModelNumber {
-		if strings.Contains(moduleModel, m.Model) {
-			return m.Type, nil
-		}
+	matches := collectMatches(logger, moduleModel, jetsonModulesByModelNumber)
+	if len(matches) == 0 {
+		return nil, identifier.ErrCannotIdentifyBoard
 	}
-	return nil, identifier.ErrCannotIdentifyBoard
+	return matches[0], nil
 }
 
 func getBoardTypeByDeviceTreeBaseModel(logger *slog.Logger) (boardtype.SBC, error) {
@@ -108,13 +188,12 @@ func getBoardTypeByDeviceTreeBaseModel(logger *slog.Logger) (boardtype.SBC, erro
 	if err != nil {
 		return nil, err
 	}
-	for _, m := range jetsonModulesByDeviceTreeBaseModel {
-		if strings.Contains(dtbm, m.Model) {
-			return m.Type, nil
-		}
+	matches := collectMatches(logger, dtbm, jetsonModulesByDeviceTreeBaseModel)
+	if len(matches) == 0 {
+		logger.Debug("device tree base model does not match any boards", slog.String("model", dtbm))
+		return nil, ErrCannotIdentifyBoard
 	}
-	logger.Debug("device tree base model does not match any boards", slog.String("model", dtbm))
-	return nil, ErrCannotIdentifyBoard
+	return matches[0], nil
 }
 
 func getDtsFile(logger *slog.Logger) (string, error) {

@@ -2,14 +2,14 @@ package test
 
 import (
 	"log/slog"
+	"os"
 	"testing"
 
-	"github.com/rinzlerlabs/sbcidentify"
 	"github.com/rinzlerlabs/sbcidentify/boardtype"
 )
 
 func TestShouldSkip(t *testing.T) {
-	sbcidentify.SetLogLevel(slog.LevelDebug)
+	slog.SetDefault(slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})))
 	tests := []struct {
 		name       string
 		setup      func() *test
