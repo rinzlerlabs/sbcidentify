@@ -61,7 +61,7 @@ func getInstalledRAMMB(logger *slog.Logger) (int, error) {
 		}
 		return kb / 1024, nil
 	}
-	return 0, fmt.Errorf("MemTotal not found in /proc/meminfo")
+	return 0, fmt.Errorf("MemTotal not found in %s", memInfoPath)
 }
 
 // refineByInstalledRAM upgrades a generic board (RAM==0) to the most specific

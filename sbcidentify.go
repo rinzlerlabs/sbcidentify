@@ -65,7 +65,7 @@ func IsBoardType(boardType boardtype.SBC) bool {
 		return false
 	}
 	if board == nil {
-		logger.Debug("board is nil, this is unexpected")
+		getLogger().Debug("board is nil, this is unexpected")
 		return false
 	}
 	return board.IsBoardType(boardType)

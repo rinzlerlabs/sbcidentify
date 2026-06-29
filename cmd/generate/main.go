@@ -81,12 +81,12 @@ package {{.Config.DetectionPackage}}
 {{if or .DTSEntries .DTBMEntries}}import "{{.Config.BoardtypeImport}}"
 {{end}}
 {{if and .Config.DTSVar .DTSEntries}}var {{.Config.DTSVar}} = []{{.Config.DetectionStructName}}{
-{{range .DTSEntries}}	{"{{.Pattern}}", boardtype.{{.Board}}},
+{{range .DTSEntries}}	{ {{printf "%q" .Pattern}}, boardtype.{{.Board}}},
 {{end}}}
 {{end}}
 {{if and .Config.DTBMVar .DTBMEntries}}var {{.Config.DTBMVar}} = []{{.Config.DetectionStructName}}{
-{{range .DTBMEntries}}{{if $.Config.HasRAMFallback}}	{"{{.Pattern}}", {{.Memory}}, boardtype.{{.Board}}, boardtype.{{.Fallback}}},
-{{else}}	{"{{.Pattern}}", boardtype.{{.Board}}},
+{{range .DTBMEntries}}{{if $.Config.HasRAMFallback}}	{ {{printf "%q" .Pattern}}, {{.Memory}}, boardtype.{{.Board}}, boardtype.{{.Fallback}}},
+{{else}}	{ {{printf "%q" .Pattern}}, boardtype.{{.Board}}},
 {{end}}{{end}}}
 {{end}}`))
 
@@ -112,7 +112,10 @@ func validate(schema *Schema) error {
 		if !byName[e.Board] {
 			return fmt.Errorf("dtbmEntry %q: unknown board %q", e.Pattern, e.Board)
 		}
-		if schema.Config.HasRAMFallback && e.Fallback != "" && !byName[e.Fallback] {
+		if schema.Config.HasRAMFallback && e.Fallback == "" {
+			return fmt.Errorf("dtbmEntry %q: missing fallback", e.Pattern)
+		}
+		if schema.Config.HasRAMFallback && !byName[e.Fallback] {
 			return fmt.Errorf("dtbmEntry %q: unknown fallback %q", e.Pattern, e.Fallback)
 		}
 	}
