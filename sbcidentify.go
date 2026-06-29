@@ -3,6 +3,7 @@ package sbcidentify
 import (
 	"errors"
 	"log/slog"
+	"sync/atomic"
 
 	"github.com/rinzlerlabs/sbcidentify/boardtype"
 	"github.com/rinzlerlabs/sbcidentify/identifier"
@@ -12,21 +13,20 @@ import (
 )
 
 var (
-	ErrUnknownBoard error        = errors.New("unknown board")
-	logger          *slog.Logger // nil → use slog.Default() at call time
+	ErrUnknownBoard error = errors.New("unknown board")
+	logger          atomic.Pointer[slog.Logger]
 )
 
 // SetLogger gives the library a specific logger. If never called, all internal
 // logging goes through slog.Default(), so the application's slog.SetDefault
 // configuration is automatically respected with no library-side setup required.
-// SetLogger is not safe to call concurrently with GetBoardType.
 func SetLogger(l *slog.Logger) {
-	logger = l
+	logger.Store(l)
 }
 
 func getLogger() *slog.Logger {
-	if logger != nil {
-		return logger
+	if l := logger.Load(); l != nil {
+		return l
 	}
 	return slog.Default()
 }

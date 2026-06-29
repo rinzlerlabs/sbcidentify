@@ -104,10 +104,16 @@ func refineByInstalledRAM(logger *slog.Logger, board boardtype.SBC) boardtype.SB
 // substring of input. Deduplicates by pretty name so overlapping patterns that
 // resolve to the same board don't produce a spurious warning.
 func collectMatches(logger *slog.Logger, input string, table []jetson) []boardtype.SBC {
+	best := 0
+	for _, m := range table {
+		if strings.Contains(input, m.Model) && len(m.Model) > best {
+			best = len(m.Model)
+		}
+	}
 	seen := make(map[string]bool)
 	var matches []boardtype.SBC
 	for _, m := range table {
-		if strings.Contains(input, m.Model) {
+		if strings.Contains(input, m.Model) && len(m.Model) == best {
 			key := m.Type.GetPrettyName()
 			if !seen[key] {
 				seen[key] = true

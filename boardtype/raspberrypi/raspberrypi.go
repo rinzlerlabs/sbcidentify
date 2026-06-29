@@ -58,11 +58,26 @@ func (r raspberryPiIdentifier) GetBoardType() (boardtype.SBC, error) {
 		return nil, err
 	}
 	r.logger.Debug("device tree model", slog.String("model", dtbm))
-	subModels := make([]raspberryPi, 0)
+	var subModels []raspberryPi
 	for _, m := range raspberryPiModels {
 		if strings.Contains(dtbm, m.Model) {
 			subModels = append(subModels, m)
 		}
+	}
+	if len(subModels) > 1 {
+		best := 0
+		for _, m := range subModels {
+			if len(m.Model) > best {
+				best = len(m.Model)
+			}
+		}
+		filtered := subModels[:0]
+		for _, m := range subModels {
+			if len(m.Model) == best {
+				filtered = append(filtered, m)
+			}
+		}
+		subModels = filtered
 	}
 	if len(subModels) == 0 {
 		return nil, ErrCannotIdentifyBoard

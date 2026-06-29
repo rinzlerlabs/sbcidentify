@@ -12,11 +12,13 @@ import (
 	"github.com/rinzlerlabs/sbcidentify"
 )
 
-// cliHandler formats log records as: <time> <LEVEL> <message>
+// cliHandler formats log records as: <time> <LEVEL> <message> key=value ...
 type cliHandler struct {
-	w     io.Writer
-	level slog.Level
-	mu    sync.Mutex
+	w      io.Writer
+	level  slog.Level
+	mu     sync.Mutex
+	prefix string // built from WithGroup calls
+	preAttrs []slog.Attr // built from WithAttrs calls
 }
 
 func (h *cliHandler) Enabled(_ context.Context, level slog.Level) bool {
@@ -26,16 +28,47 @@ func (h *cliHandler) Enabled(_ context.Context, level slog.Level) bool {
 func (h *cliHandler) Handle(_ context.Context, r slog.Record) error {
 	h.mu.Lock()
 	defer h.mu.Unlock()
-	_, err := fmt.Fprintf(h.w, "%s %s %s\n",
+
+	buf := fmt.Sprintf("%s %s %s",
 		r.Time.Format("2006-01-02T15:04:05.999Z07:00"),
 		r.Level,
 		r.Message,
 	)
+	for _, a := range h.preAttrs {
+		buf += " " + h.fmtAttr(a)
+	}
+	r.Attrs(func(a slog.Attr) bool {
+		buf += " " + h.fmtAttr(a)
+		return true
+	})
+	_, err := fmt.Fprintln(h.w, buf)
 	return err
 }
 
-func (h *cliHandler) WithAttrs([]slog.Attr) slog.Handler { return h }
-func (h *cliHandler) WithGroup(string) slog.Handler       { return h }
+func (h *cliHandler) fmtAttr(a slog.Attr) string {
+	if h.prefix != "" {
+		return h.prefix + "." + a.Key + "=" + fmt.Sprintf("%v", a.Value.Any())
+	}
+	return a.Key + "=" + fmt.Sprintf("%v", a.Value.Any())
+}
+
+func (h *cliHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
+	c := *h
+	c.preAttrs = make([]slog.Attr, len(h.preAttrs)+len(attrs))
+	copy(c.preAttrs, h.preAttrs)
+	copy(c.preAttrs[len(h.preAttrs):], attrs)
+	return &c
+}
+
+func (h *cliHandler) WithGroup(name string) slog.Handler {
+	c := *h
+	if h.prefix != "" {
+		c.prefix = h.prefix + "." + name
+	} else {
+		c.prefix = name
+	}
+	return &c
+}
 
 func main() {
 	verbose := flag.Bool("v", false, "Enable verbose logging")

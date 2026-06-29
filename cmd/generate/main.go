@@ -20,33 +20,40 @@ type Config struct {
 	BoardtypeImport     string `json:"boardtypeImport"`
 }
 
-type BoardEntry struct {
-	VarName      string `json:"varName"`
-	Manufacturer string `json:"manufacturer"`
-	Model        string `json:"model"`
-	SubModel     string `json:"subModel"`
-	RAM          int    `json:"ram"`
-	SOC          string `json:"soc"`
-	Parent       string `json:"parent"`
-}
-
-type DTSEntry struct {
-	Pattern string `json:"pattern"`
-	Board   string `json:"board"`
-}
-
-type DTBMEntry struct {
+type DTBMPattern struct {
 	Pattern  string `json:"pattern"`
-	Board    string `json:"board"`
 	Memory   int    `json:"memory"`
 	Fallback string `json:"fallback"`
 }
 
+type BoardEntry struct {
+	VarName      string        `json:"varName"`
+	Manufacturer string        `json:"manufacturer"`
+	Model        string        `json:"model"`
+	SubModel     string        `json:"subModel"`
+	RAM          int           `json:"ram"`
+	SOC          string        `json:"soc"`
+	Parent       string        `json:"parent"`
+	DTSPatterns  []string      `json:"dtsPatterns"`
+	DTBMPatterns []DTBMPattern `json:"dtbmPatterns"`
+}
+
 type Schema struct {
-	Config      Config       `json:"config"`
-	Boards      []BoardEntry `json:"boards"`
-	DTSEntries  []DTSEntry   `json:"dtsEntries"`
-	DTBMEntries []DTBMEntry  `json:"dtbmEntries"`
+	Config Config       `json:"config"`
+	Boards []BoardEntry `json:"boards"`
+}
+
+// Internal types used only for template rendering.
+type DTSEntry struct {
+	Pattern string
+	Board   string
+}
+
+type DTBMEntry struct {
+	Pattern  string
+	Board    string
+	Memory   int
+	Fallback string
 }
 
 type boardsData struct {
@@ -102,24 +109,61 @@ func validate(schema *Schema) error {
 		if b.Parent != "" && !byName[b.Parent] {
 			return fmt.Errorf("board %s: unknown parent %q", b.VarName, b.Parent)
 		}
-	}
-	for _, e := range schema.DTSEntries {
-		if !byName[e.Board] {
-			return fmt.Errorf("dtsEntry %q: unknown board %q", e.Pattern, e.Board)
+		for _, p := range b.DTBMPatterns {
+			if schema.Config.HasRAMFallback && p.Fallback == "" {
+				return fmt.Errorf("board %s: dtbmPattern %q: missing fallback", b.VarName, p.Pattern)
+			}
+			if p.Fallback != "" && !byName[p.Fallback] {
+				return fmt.Errorf("board %s: dtbmPattern %q: unknown fallback %q", b.VarName, p.Pattern, p.Fallback)
+			}
 		}
 	}
-	for _, e := range schema.DTBMEntries {
-		if !byName[e.Board] {
-			return fmt.Errorf("dtbmEntry %q: unknown board %q", e.Pattern, e.Board)
+	type dtbmKey struct {
+		pattern string
+		memory  int
+	}
+	seenDTBM := make(map[dtbmKey]string)
+	seenDTS := make(map[string]string)
+	for _, b := range schema.Boards {
+		for _, p := range b.DTSPatterns {
+			if other, exists := seenDTS[p]; exists {
+				return fmt.Errorf("ambiguous dtsPattern %q: claimed by both %s and %s", p, other, b.VarName)
+			}
+			seenDTS[p] = b.VarName
 		}
-		if schema.Config.HasRAMFallback && e.Fallback == "" {
-			return fmt.Errorf("dtbmEntry %q: missing fallback", e.Pattern)
-		}
-		if schema.Config.HasRAMFallback && !byName[e.Fallback] {
-			return fmt.Errorf("dtbmEntry %q: unknown fallback %q", e.Pattern, e.Fallback)
+		for _, p := range b.DTBMPatterns {
+			key := dtbmKey{p.Pattern, p.Memory}
+			if other, exists := seenDTBM[key]; exists {
+				return fmt.Errorf("ambiguous dtbmPattern %q memory=%d: claimed by both %s and %s", p.Pattern, p.Memory, other, b.VarName)
+			}
+			seenDTBM[key] = b.VarName
 		}
 	}
 	return nil
+}
+
+func buildDetectionData(inputFile string, schema *Schema) detectionData {
+	var dtsEntries []DTSEntry
+	var dtbmEntries []DTBMEntry
+	for _, b := range schema.Boards {
+		for _, p := range b.DTSPatterns {
+			dtsEntries = append(dtsEntries, DTSEntry{Pattern: p, Board: b.VarName})
+		}
+		for _, p := range b.DTBMPatterns {
+			dtbmEntries = append(dtbmEntries, DTBMEntry{
+				Pattern:  p.Pattern,
+				Board:    b.VarName,
+				Memory:   p.Memory,
+				Fallback: p.Fallback,
+			})
+		}
+	}
+	return detectionData{
+		InputFile:   inputFile,
+		Config:      schema.Config,
+		DTSEntries:  dtsEntries,
+		DTBMEntries: dtbmEntries,
+	}
 }
 
 func topoSort(boards []BoardEntry) ([]BoardEntry, error) {
@@ -232,12 +276,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	detectionSrc, err := render(detectionTmpl, detectionData{
-		InputFile:   filepath.Base(*input),
-		Config:      schema.Config,
-		DTSEntries:  schema.DTSEntries,
-		DTBMEntries: schema.DTBMEntries,
-	})
+	detectionSrc, err := render(detectionTmpl, buildDetectionData(filepath.Base(*input), &schema))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error generating detection: %v\n", err)
 		os.Exit(1)
