@@ -30,28 +30,6 @@ type raspberryPi struct {
 	Fallback boardtype.SBC
 }
 
-var raspberryPiModels = []raspberryPi{
-	{"Raspberry Pi 3 Model B", 1024, boardtype.RaspberryPi3B, boardtype.RaspberryPi3B},
-	{"Raspberry Pi 3 Model A", 512, boardtype.RaspberryPi3APlus, boardtype.RaspberryPi3APlus},
-	{"Raspberry Pi 3 Model B", 1024, boardtype.RaspberryPi3BPlus, boardtype.RaspberryPi3BPlus},
-	{"Raspberry Pi 4 Model B", 1024, boardtype.RaspberryPi4B1GB, boardtype.RaspberryPi4B},
-	{"Raspberry Pi 4 Model B", 2048, boardtype.RaspberryPi4B2GB, boardtype.RaspberryPi4B},
-	{"Raspberry Pi 4 Model B", 4096, boardtype.RaspberryPi4B4GB, boardtype.RaspberryPi4B},
-	{"Raspberry Pi 4 Model B", 8192, boardtype.RaspberryPi4B8GB, boardtype.RaspberryPi4B},
-	{"Raspberry Pi Compute Module 4", 1024, boardtype.RaspberryPiCM41GB, boardtype.RaspberryPi4B},
-	{"Raspberry Pi Compute Module 4", 2048, boardtype.RaspberryPiCM42GB, boardtype.RaspberryPi4B},
-	{"Raspberry Pi Compute Module 4", 4096, boardtype.RaspberryPiCM44GB, boardtype.RaspberryPi4B},
-	{"Raspberry Pi Compute Module 4", 8192, boardtype.RaspberryPiCM48GB, boardtype.RaspberryPi4B},
-	{"Raspberry Pi 400", 4096, boardtype.RaspberryPi4400, boardtype.RaspberryPi4400},
-	{"Raspberry Pi 5 Model B", 2048, boardtype.RaspberryPi5B2GB, boardtype.RaspberryPi5B},
-	{"Raspberry Pi 5 Model B", 4096, boardtype.RaspberryPi5B4GB, boardtype.RaspberryPi5B},
-	{"Raspberry Pi 5 Model B", 8192, boardtype.RaspberryPi5B8GB, boardtype.RaspberryPi5B},
-	{"Raspberry Pi Compute Module 5", 1024, boardtype.RaspberryPiCM51GB, boardtype.RaspberryPi5B},
-	{"Raspberry Pi Compute Module 5", 2048, boardtype.RaspberryPiCM52GB, boardtype.RaspberryPi5B},
-	{"Raspberry Pi Compute Module 5", 4096, boardtype.RaspberryPiCM54GB, boardtype.RaspberryPi5B},
-	{"Raspberry Pi Compute Module 5", 8192, boardtype.RaspberryPiCM58GB, boardtype.RaspberryPi5B},
-}
-
 func NewRaspberryPiIdentifier(logger *slog.Logger) identifier.BoardIdentifier {
 	logger.Debug("initializing Raspberry Pi identifier")
 	newLogger := logger.With(slog.String("source", "RaspberryPiIdentifier"))

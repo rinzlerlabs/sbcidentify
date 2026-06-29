@@ -1,0 +1,28 @@
+{
+    "name": "go-official-cgo-ready",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "remoteUser": "vscode",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "golang.go"
+            ],
+            "settings": {
+                "go.toolsManagement.autoUpdate": true,
+                "go.useLanguageServer": true,
+                "go.gopath": "/home/vscode/go",
+                "go.inferGopath": false,
+                "terminal.integrated.defaultProfile.linux": "bash"
+            }
+        }
+    },
+    "mounts": [
+        "source=go-mod-cache,target=/go/pkg/mod,type=volume",
+        "source=go-build-cache,target=/home/vscode/.cache/go-build,type=volume"
+    ],
+    "postCreateCommand": "go version && go env -w GOPATH=/home/vscode/go"
+}
