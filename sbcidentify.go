@@ -36,18 +36,18 @@ func GetBoardType() (boardtype.SBC, error) {
 	if len(boardIdentifiers) == 0 {
 		panic("no board identifiers found")
 	}
-	var errs error
+	var finalErrors error
 	var matches []boardtype.SBC
 	for _, id := range boardIdentifiers {
 		board, err := id.GetBoardType()
 		if err != nil {
-			errs = errors.Join(errs, err)
+			finalErrors = errors.Join(finalErrors, err)
 			continue
 		}
 		matches = append(matches, board)
 	}
 	if len(matches) == 0 {
-		return nil, errors.Join(ErrUnknownBoard, errs)
+		return nil, errors.Join(ErrUnknownBoard, finalErrors)
 	}
 	if len(matches) > 1 {
 		names := make([]string, len(matches))
