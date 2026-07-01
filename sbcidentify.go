@@ -47,7 +47,7 @@ func GetBoardType() (boardtype.SBC, error) {
 		matches = append(matches, board)
 	}
 	if len(matches) == 0 {
-		return nil, errs
+		return nil, errors.Join(ErrUnknownBoard, errs)
 	}
 	if len(matches) > 1 {
 		names := make([]string, len(matches))
