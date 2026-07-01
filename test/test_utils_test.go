@@ -10,6 +10,8 @@ import (
 )
 
 func TestShouldSkip(t *testing.T) {
+	prev := slog.Default()
+	t.Cleanup(func() { slog.SetDefault(prev) })
 	slog.SetDefault(slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})))
 	tests := []struct {
 		name       string

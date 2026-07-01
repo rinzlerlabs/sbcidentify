@@ -26,10 +26,18 @@ jobs:
           gofmt -w .
           git diff --exit-code
       
+      - name: Verify go.mod is tidy
+        run: |
+          go mod tidy
+          git diff --exit-code
+
+      - name: Vet
+        run: go vet ./...
+
       - name: Build
         run: go build ./...
 
       - name: Test
-        run: go test ./...
+        run: go test -race ./...
 
       
