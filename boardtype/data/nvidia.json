@@ -1,0 +1,403 @@
+{
+  "config": {
+    "detectionPackage": "nvidia",
+    "detectionStructName": "jetson",
+    "dtsVar": "jetsonModulesByModelNumber",
+    "dtbmVar": "jetsonModulesByDeviceTreeBaseModel",
+    "hasRamFallback": false,
+    "boardtypeImport": "github.com/rinzlerlabs/sbcidentify/boardtype"
+  },
+  "boards": [
+    {
+      "varName": "NVIDIA",
+      "manufacturer": "NVIDIA",
+      "model": "",
+      "subModel": "",
+      "ram": 0,
+      "soc": "",
+      "parent": ""
+    },
+    {
+      "varName": "Jetson",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "",
+      "ram": 0,
+      "soc": "",
+      "parent": "NVIDIA"
+    },
+    {
+      "varName": "JetsonOrin",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Orin",
+      "ram": 0,
+      "soc": "Tegra234",
+      "parent": "Jetson"
+    },
+    {
+      "varName": "JetsonXavier",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Xavier",
+      "ram": 0,
+      "soc": "Tegra194",
+      "parent": "Jetson"
+    },
+    {
+      "varName": "JetsonOrinNX",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Orin NX",
+      "ram": 0,
+      "soc": "Tegra234",
+      "parent": "JetsonOrin"
+    },
+    {
+      "varName": "JetsonOrinNX16GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Orin NX",
+      "ram": 16384,
+      "soc": "Tegra234",
+      "parent": "JetsonOrinNX",
+      "dtsPatterns": ["p3767-0000"],
+      "dtbmPatterns": [
+        {"pattern": "NVIDIA Jetson Orin NX Engineering Reference Developer Kit"}
+      ]
+    },
+    {
+      "varName": "JetsonOrinNX8GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Orin NX",
+      "ram": 8192,
+      "soc": "Tegra234",
+      "parent": "JetsonOrinNX",
+      "dtsPatterns": ["p3767-0001"]
+    },
+    {
+      "varName": "JetsonOrinNano",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Orin Nano",
+      "ram": 0,
+      "soc": "Tegra234",
+      "parent": "JetsonOrin"
+    },
+    {
+      "varName": "JetsonOrinNano8GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Orin Nano",
+      "ram": 8192,
+      "soc": "Tegra234",
+      "parent": "JetsonOrinNano",
+      "dtsPatterns": ["p3767-0003"]
+    },
+    {
+      "varName": "JetsonOrinNano4GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Orin Nano",
+      "ram": 4096,
+      "soc": "Tegra234",
+      "parent": "JetsonOrinNano",
+      "dtsPatterns": ["p3767-0004"]
+    },
+    {
+      "varName": "JetsonOrinNanoDeveloperKit",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Orin Nano Developer Kit",
+      "ram": 8192,
+      "soc": "Tegra234",
+      "parent": "JetsonOrinNano",
+      "dtsPatterns": ["p3767-0005"],
+      "dtbmPatterns": [
+        {"pattern": "NVIDIA Jetson Orin Nano Developer Kit"}
+      ]
+    },
+    {
+      "varName": "JetsonAGXOrin",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "AGX Orin",
+      "ram": 0,
+      "soc": "Tegra234",
+      "parent": "Jetson",
+      "dtsPatterns": ["p3701-0000"],
+      "dtbmPatterns": [
+        {"pattern": "NVIDIA Jetson AGX Orin Developer Kit"},
+        {"pattern": "NVIDIA Jetson AGX Orin"}
+      ]
+    },
+    {
+      "varName": "JetsonAGXOrin32GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "AGX Orin",
+      "ram": 32768,
+      "soc": "Tegra234",
+      "parent": "JetsonAGXOrin",
+      "dtsPatterns": ["p3701-0004"]
+    },
+    {
+      "varName": "JetsonAGXOrin64GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "AGX Orin",
+      "ram": 65536,
+      "soc": "Tegra234",
+      "parent": "JetsonAGXOrin",
+      "dtsPatterns": ["p3701-0005"]
+    },
+    {
+      "varName": "JetsonXavierNX",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Xavier NX",
+      "ram": 0,
+      "soc": "Tegra194",
+      "parent": "Jetson"
+    },
+    {
+      "varName": "JetsonXavierNXDeveloperKit",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Xavier NX Developer Kit",
+      "ram": 0,
+      "soc": "Tegra194",
+      "parent": "JetsonXavierNX",
+      "dtsPatterns": ["p3668-0000"],
+      "dtbmPatterns": [
+        {"pattern": "NVIDIA Jetson Xavier NX Developer Kit (SD-card)"},
+        {"pattern": "NVIDIA Jetson Xavier NX Developer Kit (eMMC)"},
+        {"pattern": "NVIDIA Jetson Xavier NX (SD-card)"}
+      ]
+    },
+    {
+      "varName": "JetsonXavierNX8GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Xavier NX",
+      "ram": 8192,
+      "soc": "Tegra194",
+      "parent": "JetsonXavierNX",
+      "dtsPatterns": ["p3668-0001"],
+      "dtbmPatterns": [
+        {"pattern": "NVIDIA Jetson Xavier NX (eMMC)"}
+      ]
+    },
+    {
+      "varName": "JetsonXavierNX16GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Xavier NX",
+      "ram": 16384,
+      "soc": "Tegra194",
+      "parent": "JetsonXavierNX",
+      "dtsPatterns": ["p3668-0003"]
+    },
+    {
+      "varName": "JetsonAGXXavier",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "AGX Xavier",
+      "ram": 0,
+      "soc": "Tegra194",
+      "parent": "Jetson",
+      "dtsPatterns": ["p2972-0000"],
+      "dtbmPatterns": [
+        {"pattern": "NVIDIA Jetson AGX Xavier"},
+        {"pattern": "NVIDIA Jetson AGX Xavier Developer Kit"}
+      ]
+    },
+    {
+      "varName": "JetsonAGXXavier8GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "AGX Xavier",
+      "ram": 8192,
+      "soc": "Tegra194",
+      "parent": "JetsonAGXXavier",
+      "dtsPatterns": ["p2888-0006"]
+    },
+    {
+      "varName": "JetsonAGXXavier16GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "AGX Xavier",
+      "ram": 16384,
+      "soc": "Tegra194",
+      "parent": "JetsonAGXXavier",
+      "dtsPatterns": ["p2888-0001"]
+    },
+    {
+      "varName": "JetsonAGXXavier32GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "AGX Xavier",
+      "ram": 32768,
+      "soc": "Tegra194",
+      "parent": "JetsonAGXXavier",
+      "dtsPatterns": ["p2888-0003", "p2888-0004"]
+    },
+    {
+      "varName": "JetsonAGXXavier64GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "AGX Xavier",
+      "ram": 65536,
+      "soc": "Tegra194",
+      "parent": "JetsonAGXXavier",
+      "dtsPatterns": ["p2888-0005"]
+    },
+    {
+      "varName": "JetsonAGXXavierIndustrial32GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "AGX Xavier Industrial",
+      "ram": 32768,
+      "soc": "Tegra194",
+      "parent": "JetsonAGXXavier",
+      "dtsPatterns": ["p2888-0008"]
+    },
+    {
+      "varName": "JetsonNano",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Nano",
+      "ram": 0,
+      "soc": "Tegra210",
+      "parent": "Jetson"
+    },
+    {
+      "varName": "JetsonNanoDeveloperKit",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Nano Developer Kit",
+      "ram": 0,
+      "soc": "Tegra210",
+      "parent": "JetsonNano",
+      "dtsPatterns": ["p3450-0000"],
+      "dtbmPatterns": [
+        {"pattern": "NVIDIA Jetson Nano Developer Kit"}
+      ]
+    },
+    {
+      "varName": "JetsonNano2GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Nano",
+      "ram": 2048,
+      "soc": "Tegra210",
+      "parent": "JetsonNano",
+      "dtsPatterns": ["p3448-0003"]
+    },
+    {
+      "varName": "JetsonNano16GbEMMC",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Nano",
+      "ram": 0,
+      "soc": "Tegra210",
+      "parent": "JetsonNano",
+      "dtsPatterns": ["p3448-0002"]
+    },
+    {
+      "varName": "JetsonNano4GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "Nano",
+      "ram": 4096,
+      "soc": "Tegra210",
+      "parent": "JetsonNano",
+      "dtsPatterns": ["p3448-0000"]
+    },
+    {
+      "varName": "JetsonTX2",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "TX2",
+      "ram": 0,
+      "soc": "Tegra186",
+      "parent": "Jetson",
+      "dtsPatterns": ["p2771-0000", "p3310-1000"],
+      "dtbmPatterns": [
+        {"pattern": "NVIDIA Jetson TX2 Developer Kit"},
+        {"pattern": "NVIDIA Jetson TX2"}
+      ]
+    },
+    {
+      "varName": "JetsonTX2i",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "TX2i",
+      "ram": 0,
+      "soc": "Tegra186",
+      "parent": "JetsonTX2",
+      "dtsPatterns": ["p3489-0000"]
+    },
+    {
+      "varName": "JetsonTX24GB",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "TX2",
+      "ram": 4096,
+      "soc": "Tegra186",
+      "parent": "JetsonTX2",
+      "dtsPatterns": ["p3489-0888"]
+    },
+    {
+      "varName": "JetsonTX2NX",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "TX2 NX",
+      "ram": 0,
+      "soc": "Tegra186",
+      "parent": "Jetson",
+      "dtsPatterns": ["p3636-0001", "p3509-0000"],
+      "dtbmPatterns": [
+        {"pattern": "NVIDIA Jetson TX2 NX Developer Kit"}
+      ]
+    },
+    {
+      "varName": "JetsonTX1",
+      "manufacturer": "NVIDIA",
+      "model": "Jetson",
+      "subModel": "TX1",
+      "ram": 0,
+      "soc": "Tegra210",
+      "parent": "Jetson",
+      "dtsPatterns": ["p2180-1000", "p2371-2180"],
+      "dtbmPatterns": [
+        {"pattern": "NVIDIA Jetson TX1"},
+        {"pattern": "NVIDIA Jetson TX1 Developer Kit"}
+      ]
+    },
+    {
+      "varName": "ClaraAGX",
+      "manufacturer": "NVIDIA",
+      "model": "Clara",
+      "subModel": "AGX",
+      "ram": 0,
+      "soc": "Tegra194",
+      "parent": "NVIDIA",
+      "dtsPatterns": ["p3904-0000"]
+    },
+    {
+      "varName": "ShieldTV",
+      "manufacturer": "NVIDIA",
+      "model": "Shield",
+      "subModel": "TV",
+      "ram": 0,
+      "soc": "Tegra210",
+      "parent": "NVIDIA",
+      "dtsPatterns": ["p2894-0050"],
+      "dtbmPatterns": [
+        {"pattern": "NVIDIA Shield TV"}
+      ]
+    }
+  ]
+}

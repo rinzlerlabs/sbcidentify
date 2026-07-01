@@ -3,7 +3,7 @@ package sbcidentify
 import (
 	"errors"
 	"log/slog"
-	"os"
+	"sync/atomic"
 
 	"github.com/rinzlerlabs/sbcidentify/boardtype"
 	"github.com/rinzlerlabs/sbcidentify/identifier"
@@ -13,34 +13,50 @@ import (
 )
 
 var (
-	ErrUnknownBoard error          = errors.New("unknown board")
-	logLevel        *slog.LevelVar = new(slog.LevelVar)
-	logger          *slog.Logger   = slog.New(NewLogHandler(os.Stderr, &HandlerConfig{Level: logLevel})).With("source", "sbcidentify")
+	ErrUnknownBoard error = errors.New("unknown board")
+	logger          atomic.Pointer[slog.Logger]
 )
 
-func SetLogLevel(level slog.Level) {
-	logLevel.Set(level)
+// SetLogger gives the library a specific logger. If never called, all internal
+// logging goes through slog.Default(), so the application's slog.SetDefault
+// configuration is automatically respected with no library-side setup required.
+func SetLogger(l *slog.Logger) {
+	logger.Store(l)
 }
 
-func SetLogger(l *slog.Logger) {
-	logger = l
+func getLogger() *slog.Logger {
+	if l := logger.Load(); l != nil {
+		return l
+	}
+	return slog.Default()
 }
 
 func GetBoardType() (boardtype.SBC, error) {
-	boardIdentifiers := identifier.BuildIdentifiers(logger)
+	boardIdentifiers := identifier.BuildIdentifiers(getLogger())
 	if len(boardIdentifiers) == 0 {
 		panic("no board identifiers found")
 	}
-	var final error
-	for _, identifier := range boardIdentifiers {
-		board, err := identifier.GetBoardType()
+	var finalErrors error
+	var matches []boardtype.SBC
+	for _, id := range boardIdentifiers {
+		board, err := id.GetBoardType()
 		if err != nil {
-			final = errors.Join(final, err)
+			finalErrors = errors.Join(finalErrors, err)
 			continue
 		}
-		return board, nil
+		matches = append(matches, board)
 	}
-	return nil, final
+	if len(matches) == 0 {
+		return nil, errors.Join(ErrUnknownBoard, finalErrors)
+	}
+	if len(matches) > 1 {
+		names := make([]string, len(matches))
+		for i, m := range matches {
+			names[i] = m.GetPrettyName()
+		}
+		getLogger().Warn("multiple board identifiers matched, using first", slog.Any("matches", names))
+	}
+	return matches[0], nil
 }
 
 func IsBoardType(boardType boardtype.SBC) bool {
@@ -49,7 +65,7 @@ func IsBoardType(boardType boardtype.SBC) bool {
 		return false
 	}
 	if board == nil {
-		logger.Debug("board is nil, this is unexpected")
+		getLogger().Debug("board is nil, this is unexpected")
 		return false
 	}
 	return board.IsBoardType(boardType)

@@ -1,15 +1,18 @@
 package test
 
 import (
+	"errors"
 	"log/slog"
+	"os"
 	"testing"
 
-	"github.com/rinzlerlabs/sbcidentify"
 	"github.com/rinzlerlabs/sbcidentify/boardtype"
 )
 
 func TestShouldSkip(t *testing.T) {
-	sbcidentify.SetLogLevel(slog.LevelDebug)
+	prev := slog.Default()
+	t.Cleanup(func() { slog.SetDefault(prev) })
+	slog.SetDefault(slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})))
 	tests := []struct {
 		name       string
 		setup      func() *test
@@ -57,5 +60,23 @@ func TestShouldSkip(t *testing.T) {
 				t.Errorf("%v should have skipped, but did not", tt.name)
 			}
 		})
+	}
+}
+
+// Just making sure that errors.Join works as expected with nil values, since we use it in GetBoardType.
+func TestErrorsJoinWithNil(t *testing.T) {
+	err := errors.Join(nil, nil)
+	if err != nil {
+		t.Errorf("Expected nil, got %v", err)
+	}
+	var ErrUnknownBoard error = errors.New("unknown board")
+	err = errors.Join(nil, ErrUnknownBoard)
+	if errors.Is(err, ErrUnknownBoard) == false {
+		t.Errorf("Expected ErrUnknownBoard, got %v", err)
+	}
+
+	err = errors.Join(ErrUnknownBoard, nil)
+	if errors.Is(err, ErrUnknownBoard) == false {
+		t.Errorf("Expected ErrUnknownBoard, got %v", err)
 	}
 }

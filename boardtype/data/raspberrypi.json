@@ -1,0 +1,339 @@
+{
+  "config": {
+    "detectionPackage": "raspberrypi",
+    "detectionStructName": "raspberryPi",
+    "dtsVar": "",
+    "dtbmVar": "raspberryPiModels",
+    "hasRamFallback": true,
+    "boardtypeImport": "github.com/rinzlerlabs/sbcidentify/boardtype"
+  },
+  "boards": [
+    {
+      "varName": "RaspberryPi",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "",
+      "ram": 0,
+      "soc": "",
+      "parent": ""
+    },
+    {
+      "varName": "RaspberryPi3",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "",
+      "ram": 0,
+      "soc": "BCM2837",
+      "parent": "RaspberryPi"
+    },
+    {
+      "varName": "RaspberryPi3B",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "3B",
+      "ram": 1024,
+      "soc": "BCM2837",
+      "parent": "RaspberryPi3",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi 3 Model B", "memory": 1024, "fallback": "RaspberryPi3B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPi3APlus",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "3A+",
+      "ram": 512,
+      "soc": "BCM2837",
+      "parent": "RaspberryPi3B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi 3 Model A", "memory": 512, "fallback": "RaspberryPi3APlus"}
+      ]
+    },
+    {
+      "varName": "RaspberryPi3BPlus",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "3B+",
+      "ram": 1024,
+      "soc": "BCM2837",
+      "parent": "RaspberryPi3B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi 3 Model B Plus", "memory": 1024, "fallback": "RaspberryPi3BPlus"}
+      ]
+    },
+    {
+      "varName": "RaspberryPi4",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "",
+      "ram": 0,
+      "soc": "BCM2711",
+      "parent": "RaspberryPi"
+    },
+    {
+      "varName": "RaspberryPi4B",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "4B",
+      "ram": 0,
+      "soc": "BCM2711",
+      "parent": "RaspberryPi4"
+    },
+    {
+      "varName": "RaspberryPi4B1GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "4B",
+      "ram": 1024,
+      "soc": "BCM2711",
+      "parent": "RaspberryPi4B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi 4 Model B", "memory": 1024, "fallback": "RaspberryPi4B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPi4B2GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "4B",
+      "ram": 2048,
+      "soc": "BCM2711",
+      "parent": "RaspberryPi4B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi 4 Model B", "memory": 2048, "fallback": "RaspberryPi4B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPi4B4GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "4B",
+      "ram": 4096,
+      "soc": "BCM2711",
+      "parent": "RaspberryPi4B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi 4 Model B", "memory": 4096, "fallback": "RaspberryPi4B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPi4B8GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "4B",
+      "ram": 8192,
+      "soc": "BCM2711",
+      "parent": "RaspberryPi4B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi 4 Model B", "memory": 8192, "fallback": "RaspberryPi4B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPi4400",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "4 400",
+      "ram": 4096,
+      "soc": "BCM2711",
+      "parent": "RaspberryPi4B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi 400", "memory": 4096, "fallback": "RaspberryPi4400"}
+      ]
+    },
+    {
+      "varName": "RaspberryPiCM41GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "Compute Module 4",
+      "ram": 1024,
+      "soc": "BCM2711",
+      "parent": "RaspberryPi4B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi Compute Module 4", "memory": 1024, "fallback": "RaspberryPi4B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPiCM42GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "Compute Module 4",
+      "ram": 2048,
+      "soc": "BCM2711",
+      "parent": "RaspberryPi4B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi Compute Module 4", "memory": 2048, "fallback": "RaspberryPi4B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPiCM44GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "Compute Module 4",
+      "ram": 4096,
+      "soc": "BCM2711",
+      "parent": "RaspberryPi4B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi Compute Module 4", "memory": 4096, "fallback": "RaspberryPi4B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPiCM48GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "Compute Module 4",
+      "ram": 8192,
+      "soc": "BCM2711",
+      "parent": "RaspberryPi4B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi Compute Module 4", "memory": 8192, "fallback": "RaspberryPi4B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPi5",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "",
+      "ram": 0,
+      "soc": "BCM2712",
+      "parent": "RaspberryPi"
+    },
+    {
+      "varName": "RaspberryPi5B",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "5B",
+      "ram": 0,
+      "soc": "BCM2712",
+      "parent": "RaspberryPi5"
+    },
+    {
+      "varName": "RaspberryPi5B2GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "5B",
+      "ram": 2048,
+      "soc": "BCM2712",
+      "parent": "RaspberryPi5B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi 5 Model B", "memory": 2048, "fallback": "RaspberryPi5B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPi5B4GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "5B",
+      "ram": 4096,
+      "soc": "BCM2712",
+      "parent": "RaspberryPi5B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi 5 Model B", "memory": 4096, "fallback": "RaspberryPi5B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPi5B8GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "5B",
+      "ram": 8192,
+      "soc": "BCM2712",
+      "parent": "RaspberryPi5B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi 5 Model B", "memory": 8192, "fallback": "RaspberryPi5B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPiCM51GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "Compute Module 5",
+      "ram": 1024,
+      "soc": "BCM2712",
+      "parent": "RaspberryPi5B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi Compute Module 5", "memory": 1024, "fallback": "RaspberryPi5B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPiCM52GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "Compute Module 5",
+      "ram": 2048,
+      "soc": "BCM2712",
+      "parent": "RaspberryPi5B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi Compute Module 5", "memory": 2048, "fallback": "RaspberryPi5B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPiCM54GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "Compute Module 5",
+      "ram": 4096,
+      "soc": "BCM2712",
+      "parent": "RaspberryPi5B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi Compute Module 5", "memory": 4096, "fallback": "RaspberryPi5B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPiCM58GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "Compute Module 5",
+      "ram": 8192,
+      "soc": "BCM2712",
+      "parent": "RaspberryPi5B",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi Compute Module 5", "memory": 8192, "fallback": "RaspberryPi5B"}
+      ]
+    },
+    {
+      "varName": "RaspberryPiCM5Lite",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "Compute Module 5 Lite",
+      "ram": 0,
+      "soc": "BCM2712",
+      "parent": "RaspberryPi5B"
+    },
+    {
+      "varName": "RaspberryPiCM5Lite2GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "Compute Module 5 Lite",
+      "ram": 2048,
+      "soc": "BCM2712",
+      "parent": "RaspberryPiCM5Lite",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi Compute Module 5 Lite", "memory": 2048, "fallback": "RaspberryPiCM5Lite"}
+      ]
+    },
+    {
+      "varName": "RaspberryPiCM5Lite4GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "Compute Module 5 Lite",
+      "ram": 4096,
+      "soc": "BCM2712",
+      "parent": "RaspberryPiCM5Lite",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi Compute Module 5 Lite", "memory": 4096, "fallback": "RaspberryPiCM5Lite"}
+      ]
+    },
+    {
+      "varName": "RaspberryPiCM5Lite8GB",
+      "manufacturer": "Raspberry Pi",
+      "model": "Raspberry Pi",
+      "subModel": "Compute Module 5 Lite",
+      "ram": 8192,
+      "soc": "BCM2712",
+      "parent": "RaspberryPiCM5Lite",
+      "dtbmPatterns": [
+        {"pattern": "Raspberry Pi Compute Module 5 Lite", "memory": 8192, "fallback": "RaspberryPiCM5Lite"}
+      ]
+    }
+  ]
+}
